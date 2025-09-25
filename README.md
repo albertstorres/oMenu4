@@ -73,7 +73,6 @@ Além disso, o sistema permite o **cadastro e gerenciamento de produtos, mesas e
 - [Python 3.11+](https://www.python.org/)  
 - [Node.js 18+](https://nodejs.org/)  
 - [PostgreSQL 15+](https://www.postgresql.org/)  
-- [Docker](https://www.docker.com/) (opcional, recomendado)  
 
 ### ▶️ Passo a passo  
 
