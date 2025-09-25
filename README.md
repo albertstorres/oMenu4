@@ -116,8 +116,8 @@ Além disso, o sistema permite o **cadastro e gerenciamento de produtos, mesas e
 
 ## 🤝 Contribuição  
 
-Contribuições são bem-vindas!  
-Siga os passos:  
+Contribuições apenas dos membros do grupo 02 de Projetos 4!  
+Siga os passos:   
 
 1. Faça um fork do projeto.  
 2. Crie uma branch para sua feature (`git checkout -b feature/nova-feature`).  
@@ -125,8 +125,4 @@ Siga os passos:
 4. Faça o push para a branch (`git push origin feature/nova-feature`).  
 5. Abra um Pull Request.  
 
----
-
-## 📜 Licença  
-
-Este projeto está sob a licença **MIT** – veja o arquivo [LICENSE](LICENSE) para detalhes.  
+---  
