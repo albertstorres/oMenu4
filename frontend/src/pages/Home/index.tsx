@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
-import { Button } from '../components/ui/button';
-import { Badge } from '../components/ui/badge';
-import { mockAPI } from '../data/mock';
-import { useAuth } from '../contexts/AuthContext';
+import { Card, CardContent, CardHeader, CardTitle } from '../../components/ui/card';
+import { Button } from '../../components/ui/button';
+import { Badge } from '../../components/ui/badge';
+import { mockAPI } from '../../data/mock';
+import { useAuth } from '../../contexts/AuthContext';
 import { 
   TrendingUp, 
   Users, 
@@ -13,24 +13,48 @@ import {
   UtensilsCrossed,
   ArrowRight
 } from 'lucide-react';
+import './styles.css';
 
-const Home = () => {
+interface Stats {
+  totalTables: number;
+  occupiedTables: number;
+  totalProducts: number;
+  totalOrders: number;
+}
+
+interface Order {
+  id: string;
+  tableNumber: string;
+  items: any[];
+  total: number;
+  status: string;
+}
+
+interface Product {
+  id: string;
+  name: string;
+  price: number;
+  image: string;
+  category: string;
+}
+
+const Home: React.FC = () => {
   const navigate = useNavigate();
   const { user, isAuthenticated } = useAuth();
-  const [stats, setStats] = useState({
+  const [stats, setStats] = useState<Stats>({
     totalTables: 0,
     occupiedTables: 0,
     totalProducts: 0,
     totalOrders: 0
   });
-  const [recentOrders, setRecentOrders] = useState([]);
-  const [popularProducts, setPopularProducts] = useState([]);
+  const [recentOrders, setRecentOrders] = useState<Order[]>([]);
+  const [popularProducts, setPopularProducts] = useState<Product[]>([]);
 
   useEffect(() => {
     loadDashboardData();
   }, []);
 
-  const loadDashboardData = async () => {
+  const loadDashboardData = async (): Promise<void> => {
     try {
       const [tables, products, orders] = await Promise.all([
         mockAPI.getTables(),
@@ -40,7 +64,7 @@ const Home = () => {
 
       setStats({
         totalTables: tables.length,
-        occupiedTables: tables.filter(t => t.status === 'occupied').length,
+        occupiedTables: tables.filter((t: any) => t.status === 'occupied').length,
         totalProducts: products.length,
         totalOrders: orders.length
       });
@@ -52,7 +76,7 @@ const Home = () => {
     }
   };
 
-  const getStatusColor = (status) => {
+  const getStatusColor = (status: string): string => {
     switch (status) {
       case 'preparing': return 'bg-yellow-500';
       case 'ready': return 'bg-green-500';
@@ -61,7 +85,7 @@ const Home = () => {
     }
   };
 
-  const getStatusText = (status) => {
+  const getStatusText = (status: string): string => {
     switch (status) {
       case 'preparing': return 'Preparando';
       case 'ready': return 'Pronto';
@@ -72,30 +96,30 @@ const Home = () => {
 
   if (!isAuthenticated) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-orange-50 to-red-50">
-        <div className="max-w-7xl mx-auto px-4 py-16">
+      <div className="home-landing">
+        <div className="home-container">
           {/* Hero Section */}
-          <div className="text-center mb-16">
-            <div className="mb-8">
-              <div className="bg-gradient-to-r from-orange-500 to-red-500 p-4 rounded-full w-20 h-20 mx-auto mb-6">
-                <UtensilsCrossed className="h-12 w-12 text-white" />
+          <div className="hero-section">
+            <div className="hero-content">
+              <div className="hero-icon">
+                <UtensilsCrossed className="hero-icon-svg" />
               </div>
-              <h1 className="text-5xl font-bold text-gray-900 mb-4">
+              <h1 className="hero-title">
                 CardápioDigital
               </h1>
-              <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+              <p className="hero-description">
                 Sistema completo de cardápio digital com recursos de acessibilidade 
                 para restaurantes modernos
               </p>
             </div>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <div className="hero-actions">
               <Button 
                 size="lg" 
                 onClick={() => navigate('/login')}
-                className="bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600"
+                className="primary-button"
               >
                 Acessar Sistema
-                <ArrowRight className="ml-2 h-4 w-4" />
+                <ArrowRight className="button-icon" />
               </Button>
               <Button 
                 size="lg" 
@@ -108,44 +132,44 @@ const Home = () => {
           </div>
 
           {/* Features */}
-          <div className="grid md:grid-cols-3 gap-8 mb-16">
-            <Card className="text-center hover:shadow-lg transition-shadow">
+          <div className="features-grid">
+            <Card className="feature-card">
               <CardHeader>
-                <div className="bg-orange-100 p-3 rounded-full w-16 h-16 mx-auto mb-4">
-                  <UtensilsCrossed className="h-10 w-10 text-orange-600" />
+                <div className="feature-icon orange">
+                  <UtensilsCrossed className="feature-icon-svg" />
                 </div>
                 <CardTitle>Gestão Completa</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-gray-600">
+                <p className="feature-description">
                   Gerencie produtos, mesas e pedidos em uma plataforma integrada
                 </p>
               </CardContent>
             </Card>
 
-            <Card className="text-center hover:shadow-lg transition-shadow">
+            <Card className="feature-card">
               <CardHeader>
-                <div className="bg-green-100 p-3 rounded-full w-16 h-16 mx-auto mb-4">
-                  <Users className="h-10 w-10 text-green-600" />
+                <div className="feature-icon green">
+                  <Users className="feature-icon-svg" />
                 </div>
                 <CardTitle>Multi-usuário</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-gray-600">
+                <p className="feature-description">
                   Diferentes níveis de acesso para gerentes e garçons
                 </p>
               </CardContent>
             </Card>
 
-            <Card className="text-center hover:shadow-lg transition-shadow">
+            <Card className="feature-card">
               <CardHeader>
-                <div className="bg-blue-100 p-3 rounded-full w-16 h-16 mx-auto mb-4">
-                  <Clock className="h-10 w-10 text-blue-600" />
+                <div className="feature-icon blue">
+                  <Clock className="feature-icon-svg" />
                 </div>
                 <CardTitle>Acessibilidade</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-gray-600">
+                <p className="feature-description">
                   Recursos completos para pessoas com deficiência visual
                 </p>
               </CardContent>
@@ -157,97 +181,97 @@ const Home = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="max-w-7xl mx-auto px-4 py-8">
+    <div className="home-dashboard">
+      <div className="home-container">
         {/* Welcome Header */}
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">
+        <div className="welcome-header">
+          <h1 className="welcome-title">
             Bem-vindo, {user?.name}!
           </h1>
-          <p className="text-gray-600">
+          <p className="welcome-description">
             Aqui está um resumo das operações do restaurante
           </p>
         </div>
 
         {/* Stats Cards */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-8">
-          <Card>
-            <CardContent className="p-6">
-              <div className="flex items-center justify-between">
+        <div className="stats-grid">
+          <Card className="stat-card">
+            <CardContent className="stat-content">
+              <div className="stat-row">
                 <div>
-                  <p className="text-sm font-medium text-gray-600">Total de Mesas</p>
-                  <p className="text-2xl font-bold text-gray-900">{stats.totalTables}</p>
+                  <p className="stat-label">Total de Mesas</p>
+                  <p className="stat-value">{stats.totalTables}</p>
                 </div>
-                <div className="bg-blue-100 p-3 rounded-full">
-                  <Users className="h-6 w-6 text-blue-600" />
+                <div className="stat-icon blue">
+                  <Users className="stat-icon-svg" />
                 </div>
               </div>
             </CardContent>
           </Card>
 
-          <Card>
-            <CardContent className="p-6">
-              <div className="flex items-center justify-between">
+          <Card className="stat-card">
+            <CardContent className="stat-content">
+              <div className="stat-row">
                 <div>
-                  <p className="text-sm font-medium text-gray-600">Mesas Ocupadas</p>
-                  <p className="text-2xl font-bold text-gray-900">{stats.occupiedTables}</p>
+                  <p className="stat-label">Mesas Ocupadas</p>
+                  <p className="stat-value">{stats.occupiedTables}</p>
                 </div>
-                <div className="bg-green-100 p-3 rounded-full">
-                  <TrendingUp className="h-6 w-6 text-green-600" />
+                <div className="stat-icon green">
+                  <TrendingUp className="stat-icon-svg" />
                 </div>
               </div>
             </CardContent>
           </Card>
 
-          <Card>
-            <CardContent className="p-6">
-              <div className="flex items-center justify-between">
+          <Card className="stat-card">
+            <CardContent className="stat-content">
+              <div className="stat-row">
                 <div>
-                  <p className="text-sm font-medium text-gray-600">Produtos</p>
-                  <p className="text-2xl font-bold text-gray-900">{stats.totalProducts}</p>
+                  <p className="stat-label">Produtos</p>
+                  <p className="stat-value">{stats.totalProducts}</p>
                 </div>
-                <div className="bg-orange-100 p-3 rounded-full">
-                  <UtensilsCrossed className="h-6 w-6 text-orange-600" />
+                <div className="stat-icon orange">
+                  <UtensilsCrossed className="stat-icon-svg" />
                 </div>
               </div>
             </CardContent>
           </Card>
 
-          <Card>
-            <CardContent className="p-6">
-              <div className="flex items-center justify-between">
+          <Card className="stat-card">
+            <CardContent className="stat-content">
+              <div className="stat-row">
                 <div>
-                  <p className="text-sm font-medium text-gray-600">Pedidos Hoje</p>
-                  <p className="text-2xl font-bold text-gray-900">{stats.totalOrders}</p>
+                  <p className="stat-label">Pedidos Hoje</p>
+                  <p className="stat-value">{stats.totalOrders}</p>
                 </div>
-                <div className="bg-purple-100 p-3 rounded-full">
-                  <DollarSign className="h-6 w-6 text-purple-600" />
+                <div className="stat-icon purple">
+                  <DollarSign className="stat-icon-svg" />
                 </div>
               </div>
             </CardContent>
           </Card>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-8">
+        <div className="dashboard-grid">
           {/* Recent Orders */}
-          <Card>
+          <Card className="dashboard-card">
             <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Clock className="h-5 w-5" />
+              <CardTitle className="dashboard-title">
+                <Clock className="dashboard-title-icon" />
                 Pedidos Recentes
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="space-y-4">
+              <div className="orders-list">
                 {recentOrders.map((order) => (
-                  <div key={order.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                  <div key={order.id} className="order-item">
                     <div>
-                      <p className="font-medium">Mesa {order.tableNumber}</p>
-                      <p className="text-sm text-gray-600">
+                      <p className="order-table">Mesa {order.tableNumber}</p>
+                      <p className="order-details">
                         {order.items.length} itens - R$ {order.total.toFixed(2)}
                       </p>
                     </div>
-                    <Badge className={`${getStatusColor(order.status)} text-white`}>
+                    <Badge className={`status-badge ${getStatusColor(order.status)}`}>
                       {getStatusText(order.status)}
                     </Badge>
                   </div>
@@ -257,25 +281,25 @@ const Home = () => {
           </Card>
 
           {/* Popular Products */}
-          <Card>
+          <Card className="dashboard-card">
             <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <TrendingUp className="h-5 w-5" />
+              <CardTitle className="dashboard-title">
+                <TrendingUp className="dashboard-title-icon" />
                 Produtos Populares
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="space-y-4">
+              <div className="products-list">
                 {popularProducts.map((product) => (
-                  <div key={product.id} className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
+                  <div key={product.id} className="product-item">
                     <img 
                       src={product.image} 
                       alt={product.name}
-                      className="w-12 h-12 rounded-lg object-cover"
+                      className="product-image"
                     />
-                    <div className="flex-1">
-                      <p className="font-medium">{product.name}</p>
-                      <p className="text-sm text-gray-600">R$ {product.price.toFixed(2)}</p>
+                    <div className="product-details">
+                      <p className="product-name">{product.name}</p>
+                      <p className="product-price">R$ {product.price.toFixed(2)}</p>
                     </div>
                     <Badge variant="secondary">{product.category}</Badge>
                   </div>
@@ -286,12 +310,12 @@ const Home = () => {
         </div>
 
         {/* Quick Actions */}
-        <div className="mt-8">
-          <h3 className="text-lg font-semibold mb-4">Ações Rápidas</h3>
-          <div className="flex flex-wrap gap-4">
+        <div className="quick-actions">
+          <h3 className="quick-actions-title">Ações Rápidas</h3>
+          <div className="quick-actions-buttons">
             <Button 
               onClick={() => navigate('/produtos')}
-              className="bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600"
+              className="primary-button"
             >
               Ver Cardápio
             </Button>

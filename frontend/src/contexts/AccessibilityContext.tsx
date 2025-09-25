@@ -1,8 +1,26 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 
-const AccessibilityContext = createContext();
+interface AccessibilityContextType {
+  fontSize: number;
+  highContrast: boolean;
+  screenReader: boolean;
+  keyboardNavigation: boolean;
+  increaseFontSize: () => void;
+  decreaseFontSize: () => void;
+  resetFontSize: () => void;
+  toggleHighContrast: () => void;
+  toggleScreenReader: () => void;
+  toggleKeyboardNavigation: () => void;
+  announceToScreenReader: (message: string) => void;
+}
 
-export const useAccessibility = () => {
+interface AccessibilityProviderProps {
+  children: ReactNode;
+}
+
+const AccessibilityContext = createContext<AccessibilityContextType | undefined>(undefined);
+
+export const useAccessibility = (): AccessibilityContextType => {
   const context = useContext(AccessibilityContext);
   if (!context) {
     throw new Error('useAccessibility must be used within an AccessibilityProvider');
@@ -10,11 +28,11 @@ export const useAccessibility = () => {
   return context;
 };
 
-export const AccessibilityProvider = ({ children }) => {
-  const [fontSize, setFontSize] = useState(16);
-  const [highContrast, setHighContrast] = useState(false);
-  const [screenReader, setScreenReader] = useState(false);
-  const [keyboardNavigation, setKeyboardNavigation] = useState(false);
+export const AccessibilityProvider: React.FC<AccessibilityProviderProps> = ({ children }) => {
+  const [fontSize, setFontSize] = useState<number>(16);
+  const [highContrast, setHighContrast] = useState<boolean>(false);
+  const [screenReader, setScreenReader] = useState<boolean>(false);
+  const [keyboardNavigation, setKeyboardNavigation] = useState<boolean>(false);
 
   useEffect(() => {
     // Carregar configurações salvas
@@ -54,31 +72,31 @@ export const AccessibilityProvider = ({ children }) => {
     }
   }, [fontSize, highContrast, screenReader, keyboardNavigation]);
 
-  const increaseFontSize = () => {
+  const increaseFontSize = (): void => {
     setFontSize(prev => Math.min(prev + 2, 24));
   };
 
-  const decreaseFontSize = () => {
+  const decreaseFontSize = (): void => {
     setFontSize(prev => Math.max(prev - 2, 12));
   };
 
-  const resetFontSize = () => {
+  const resetFontSize = (): void => {
     setFontSize(16);
   };
 
-  const toggleHighContrast = () => {
+  const toggleHighContrast = (): void => {
     setHighContrast(prev => !prev);
   };
 
-  const toggleScreenReader = () => {
+  const toggleScreenReader = (): void => {
     setScreenReader(prev => !prev);
   };
 
-  const toggleKeyboardNavigation = () => {
+  const toggleKeyboardNavigation = (): void => {
     setKeyboardNavigation(prev => !prev);
   };
 
-  const announceToScreenReader = (message) => {
+  const announceToScreenReader = (message: string): void => {
     if (screenReader) {
       const announcement = document.createElement('div');
       announcement.setAttribute('aria-live', 'polite');
@@ -93,7 +111,7 @@ export const AccessibilityProvider = ({ children }) => {
     }
   };
 
-  const value = {
+  const value: AccessibilityContextType = {
     fontSize,
     highContrast,
     screenReader,

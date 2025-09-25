@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Button } from '../ui/button';
 import { Badge } from '../ui/badge';
-import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
+import { Card, CardContent } from '../ui/card';
 import { Input } from '../ui/input';
 import { Label } from '../ui/label';
 import { Separator } from '../ui/separator';
@@ -25,8 +25,15 @@ import {
   MapPin,
   User
 } from 'lucide-react';
+import './styles.css';
 
-const CartSidebar = () => {
+interface CustomerInfo {
+  name: string;
+  tableNumber: string;
+  notes: string;
+}
+
+const CartSidebar: React.FC = () => {
   const { 
     cart, 
     isOpen, 
@@ -38,14 +45,14 @@ const CartSidebar = () => {
   } = useCart();
   const { user, isAuthenticated } = useAuth();
   const { toast } = useToast();
-  const [customerInfo, setCustomerInfo] = useState({
+  const [customerInfo, setCustomerInfo] = useState<CustomerInfo>({
     name: '',
     tableNumber: cart.tableNumber || '',
     notes: ''
   });
-  const [processing, setProcessing] = useState(false);
+  const [processing, setProcessing] = useState<boolean>(false);
 
-  const handleQuantityChange = (productId, newQuantity) => {
+  const handleQuantityChange = (productId: string, newQuantity: number): void => {
     if (newQuantity <= 0) {
       removeItem(productId);
     } else {
@@ -53,12 +60,12 @@ const CartSidebar = () => {
     }
   };
 
-  const handleTableNumberChange = (tableNumber) => {
+  const handleTableNumberChange = (tableNumber: string): void => {
     setCustomerInfo(prev => ({ ...prev, tableNumber }));
     setTableNumber(tableNumber);
   };
 
-  const handleCheckout = async () => {
+  const handleCheckout = async (): Promise<void> => {
     if (cart.items.length === 0) {
       toast({
         title: "Carrinho vazio",
@@ -117,10 +124,10 @@ const CartSidebar = () => {
 
   return (
     <Sheet open={isOpen} onOpenChange={setIsOpen}>
-      <SheetContent className="w-full sm:max-w-lg">
+      <SheetContent className="cart-sheet">
         <SheetHeader>
-          <SheetTitle className="flex items-center gap-2">
-            <ShoppingCart className="h-5 w-5" />
+          <SheetTitle className="cart-title">
+            <ShoppingCart className="cart-title-icon" />
             Carrinho ({cart.items.length})
           </SheetTitle>
           <SheetDescription>
@@ -128,69 +135,69 @@ const CartSidebar = () => {
           </SheetDescription>
         </SheetHeader>
 
-        <div className="flex flex-col h-full">
+        <div className="cart-content">
           {/* Cart Items */}
-          <div className="flex-1 overflow-auto py-6">
+          <div className="cart-items">
             {cart.items.length === 0 ? (
-              <div className="text-center py-12">
-                <ShoppingCart className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                <h3 className="text-lg font-semibold text-gray-900 mb-2">
+              <div className="empty-cart">
+                <ShoppingCart className="empty-cart-icon" />
+                <h3 className="empty-cart-title">
                   Carrinho vazio
                 </h3>
-                <p className="text-gray-600">
+                <p className="empty-cart-description">
                   Adicione itens do cardápio para começar seu pedido
                 </p>
               </div>
             ) : (
-              <div className="space-y-4">
+              <div className="cart-items-list">
                 {cart.items.map((item) => (
                   <Card key={item.id}>
-                    <CardContent className="p-4">
-                      <div className="flex items-start gap-3">
+                    <CardContent className="cart-item-content">
+                      <div className="cart-item">
                         <img 
                           src={item.image} 
                           alt={item.name}
-                          className="w-16 h-16 rounded-lg object-cover"
+                          className="cart-item-image"
                         />
-                        <div className="flex-1 min-w-0">
-                          <h4 className="font-medium truncate">{item.name}</h4>
-                          <p className="text-sm text-gray-600">
+                        <div className="cart-item-details">
+                          <h4 className="cart-item-name">{item.name}</h4>
+                          <p className="cart-item-price">
                             R$ {item.price.toFixed(2)}
                           </p>
-                          <Badge variant="outline" className="mt-1">
+                          <Badge variant="outline" className="cart-item-category">
                             {item.category}
                           </Badge>
                         </div>
-                        <div className="flex flex-col items-end gap-2">
+                        <div className="cart-item-controls">
                           <Button
                             variant="ghost"
                             size="sm"
                             onClick={() => removeItem(item.id)}
-                            className="text-red-600 hover:text-red-700 hover:bg-red-50"
+                            className="remove-button"
                           >
-                            <Trash2 className="h-4 w-4" />
+                            <Trash2 className="remove-icon" />
                           </Button>
-                          <div className="flex items-center gap-2">
+                          <div className="quantity-controls">
                             <Button
                               variant="outline"
                               size="sm"
                               onClick={() => handleQuantityChange(item.id, item.quantity - 1)}
                             >
-                              <Minus className="h-3 w-3" />
+                              <Minus className="quantity-icon" />
                             </Button>
-                            <span className="font-medium">{item.quantity}</span>
+                            <span className="quantity-display">{item.quantity}</span>
                             <Button
                               variant="outline"
                               size="sm"
                               onClick={() => handleQuantityChange(item.id, item.quantity + 1)}
                             >
-                              <Plus className="h-3 w-3" />
+                              <Plus className="quantity-icon" />
                             </Button>
                           </div>
                         </div>
                       </div>
-                      <div className="mt-3 text-right">
-                        <span className="font-semibold text-orange-600">
+                      <div className="cart-item-total">
+                        <span className="item-total-price">
                           R$ {(item.price * item.quantity).toFixed(2)}
                         </span>
                       </div>
@@ -203,41 +210,41 @@ const CartSidebar = () => {
 
           {/* Checkout Section */}
           {cart.items.length > 0 && (
-            <div className="border-t pt-6">
-              <div className="space-y-4">
+            <div className="checkout-section">
+              <div className="checkout-content">
                 {/* Customer Info */}
-                <div className="space-y-3">
-                  <div>
+                <div className="customer-info">
+                  <div className="input-group">
                     <Label htmlFor="customerName">Nome (opcional)</Label>
-                    <div className="relative">
-                      <User className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+                    <div className="input-with-icon">
+                      <User className="input-icon" />
                       <Input
                         id="customerName"
                         placeholder="Seu nome"
                         value={customerInfo.name}
                         onChange={(e) => setCustomerInfo(prev => ({ ...prev, name: e.target.value }))}
-                        className="pl-10"
+                        className="input-field"
                       />
                     </div>
                   </div>
 
-                  <div>
+                  <div className="input-group">
                     <Label htmlFor="tableNumber">Número da Mesa *</Label>
-                    <div className="relative">
-                      <MapPin className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+                    <div className="input-with-icon">
+                      <MapPin className="input-icon" />
                       <Input
                         id="tableNumber"
                         type="number"
                         placeholder="Ex: 5"
                         value={customerInfo.tableNumber}
                         onChange={(e) => handleTableNumberChange(e.target.value)}
-                        className="pl-10"
+                        className="input-field"
                         required
                       />
                     </div>
                   </div>
 
-                  <div>
+                  <div className="input-group">
                     <Label htmlFor="notes">Observações (opcional)</Label>
                     <Input
                       id="notes"
@@ -251,14 +258,14 @@ const CartSidebar = () => {
                 <Separator />
 
                 {/* Total */}
-                <div className="space-y-2">
-                  <div className="flex justify-between text-lg font-semibold">
+                <div className="total-section">
+                  <div className="total-row">
                     <span>Total:</span>
-                    <span className="text-orange-600">
+                    <span className="total-price">
                       R$ {cart.total.toFixed(2)}
                     </span>
                   </div>
-                  <p className="text-sm text-gray-600">
+                  <p className="items-count">
                     Itens: {cart.items.reduce((sum, item) => sum + item.quantity, 0)}
                   </p>
                 </div>
@@ -267,16 +274,16 @@ const CartSidebar = () => {
                 <Button
                   onClick={handleCheckout}
                   disabled={processing || cart.items.length === 0}
-                  className="w-full bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600"
+                  className="checkout-button"
                 >
-                  <CreditCard className="mr-2 h-4 w-4" />
+                  <CreditCard className="checkout-icon" />
                   {processing ? 'Processando...' : 'Finalizar Pedido'}
                 </Button>
 
                 <Button
                   variant="outline"
                   onClick={clearCart}
-                  className="w-full"
+                  className="clear-button"
                   disabled={processing}
                 >
                   Limpar Carrinho

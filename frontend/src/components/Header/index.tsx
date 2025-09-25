@@ -16,19 +16,26 @@ import {
   List,
   Accessibility
 } from 'lucide-react';
+import './styles.css';
 
-const Header = () => {
+interface NavItem {
+  path: string;
+  label: string;
+  icon: React.ComponentType<{ className?: string }>;
+}
+
+const Header: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { user, logout, isAuthenticated } = useAuth();
   const { getItemCount, setIsOpen } = useCart();
 
-  const handleLogout = async () => {
+  const handleLogout = async (): Promise<void> => {
     await logout();
     navigate('/login');
   };
 
-  const navItems = [
+  const navItems: NavItem[] = [
     { path: '/', label: 'Home', icon: Home },
     { path: '/produtos', label: 'Produtos', icon: UtensilsCrossed },
     ...(user?.role === 'manager' ? [
@@ -40,52 +47,52 @@ const Header = () => {
   ];
 
   return (
-    <header className="bg-white shadow-md border-b sticky top-0 z-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16">
+    <header className="header">
+      <div className="header-container">
+        <div className="header-content">
           {/* Logo */}
           <div 
-            className="flex items-center space-x-2 cursor-pointer"
+            className="logo-container"
             onClick={() => navigate('/')}
           >
-            <div className="bg-gradient-to-r from-orange-500 to-red-500 p-2 rounded-lg">
-              <UtensilsCrossed className="h-6 w-6 text-white" />
+            <div className="logo-icon">
+              <UtensilsCrossed className="logo-icon-svg" />
             </div>
-            <span className="text-xl font-bold text-gray-900">
-              CardápioDigital
+            <span className="logo-text">
+              oMenu
             </span>
           </div>
 
           {/* Navigation */}
-          <nav className="hidden md:flex items-center space-x-6">
+          <nav className="nav-desktop">
             {navItems.map(({ path, label, icon: Icon }) => (
               <Button
                 key={path}
                 variant={location.pathname === path ? "default" : "ghost"}
                 size="sm"
                 onClick={() => navigate(path)}
-                className="flex items-center space-x-2"
+                className="nav-button"
               >
-                <Icon className="h-4 w-4" />
+                <Icon className="nav-icon" />
                 <span>{label}</span>
               </Button>
             ))}
           </nav>
 
           {/* Right Actions */}
-          <div className="flex items-center space-x-4">
+          <div className="header-actions">
             {/* Cart */}
             <Button
               variant="outline"
               size="sm"
               onClick={() => setIsOpen(true)}
-              className="relative"
+              className="cart-button"
             >
-              <ShoppingCart className="h-4 w-4" />
+              <ShoppingCart className="cart-icon" />
               {getItemCount() > 0 && (
                 <Badge 
                   variant="destructive" 
-                  className="absolute -top-2 -right-2 h-5 w-5 flex items-center justify-center p-0 text-xs"
+                  className="cart-badge"
                 >
                   {getItemCount()}
                 </Badge>
@@ -94,11 +101,11 @@ const Header = () => {
 
             {/* User Menu */}
             {isAuthenticated ? (
-              <div className="flex items-center space-x-3">
-                <div className="flex items-center space-x-2">
-                  <User className="h-4 w-4" />
-                  <span className="text-sm font-medium">{user?.name}</span>
-                  <Badge variant="secondary" className="text-xs">
+              <div className="user-menu">
+                <div className="user-info">
+                  <User className="user-icon" />
+                  <span className="user-name">{user?.name}</span>
+                  <Badge variant="secondary" className="user-role">
                     {user?.role === 'manager' ? 'Gerente' : 'Garçom'}
                   </Badge>
                 </div>
@@ -107,7 +114,7 @@ const Header = () => {
                   size="sm"
                   onClick={handleLogout}
                 >
-                  <LogOut className="h-4 w-4" />
+                  <LogOut className="logout-icon" />
                 </Button>
               </div>
             ) : (
@@ -123,9 +130,9 @@ const Header = () => {
             <Button
               variant="ghost"
               size="sm"
-              className="md:hidden"
+              className="mobile-menu-button"
             >
-              <Menu className="h-4 w-4" />
+              <Menu className="mobile-menu-icon" />
             </Button>
           </div>
         </div>

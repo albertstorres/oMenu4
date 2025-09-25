@@ -5,13 +5,13 @@ import { AuthProvider } from "./contexts/AuthContext";
 import { CartProvider } from "./contexts/CartContext";
 import { AccessibilityProvider } from "./contexts/AccessibilityContext";
 import { Toaster } from "./components/ui/toaster";
-import Header from "./components/Layout/Header";
-import CartSidebar from "./components/Cart/CartSidebar";
+import Header from "./components/Header";
+import CartSidebar from "./components/CartSidebar";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import ProductList from "./pages/ProductList";
 
-function App() {
+const App: React.FC = () => {
   return (
     <div className="App">
       <BrowserRouter>
@@ -36,6 +36,6 @@ function App() {
       </BrowserRouter>
     </div>
   );
-}
+};
 
 export default App;
