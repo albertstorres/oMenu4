@@ -1,0 +1,20 @@
+version: '3.8'
+
+services:
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3000:80"
+    container_name: omenu-frontend
+    restart: unless-stopped
+    environment:
+      - NODE_ENV=production
+    networks:
+      - omenu-network
+
+networks:
+  omenu-network:
+    driver: bridge
+
