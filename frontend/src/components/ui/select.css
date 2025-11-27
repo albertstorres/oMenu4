@@ -51,6 +51,7 @@
   max-height: 12rem;
   overflow-y: auto;
   margin-top: 0.25rem;
+  display: block;
 }
 
 .select-item {

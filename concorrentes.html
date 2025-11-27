@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Análise da Concorrência - oMenu</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body { 
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; 
+            background: linear-gradient(135deg, #f9fafb 0%, #f3f4f6 100%);
+            padding: 20px;
+            line-height: 1.6;
+            color: #374151;
+        }
+        
+        .container { 
+            max-width: 1200px; 
+            margin: 0 auto; 
+            background-color: #ffffff; 
+            padding: 40px; 
+            border-radius: 20px; 
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+        }
+        
+        h1 { 
+            text-align: center; 
+            color: #111827; 
+            margin-bottom: 16px; 
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #f97316, #ef4444);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .intro-text { 
+            text-align: center; 
+            font-size: 1.125rem; 
+            color: #6b7280; 
+            margin-bottom: 48px; 
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        /* Layout dos Concorrentes (Cards) */
+        .competitor-grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); 
+            gap: 24px; 
+            margin-top: 40px; 
+        }
+        
+        .competitor-card { 
+            border-radius: 16px; 
+            padding: 32px; 
+            background: #ffffff;
+            border: 1px solid #e5e7eb;
+            transition: all 0.3s ease; 
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .competitor-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            transition: all 0.3s ease;
+        }
+        
+        .competitor-card:hover { 
+            transform: translateY(-8px); 
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            border-color: transparent;
+        }
+
+        .logo-section { 
+            display: flex; 
+            align-items: center; 
+            margin-bottom: 20px; 
+        }
+        
+        .logo-placeholder { 
+            width: 64px; 
+            height: 64px; 
+            margin-right: 16px; 
+            border-radius: 12px; 
+            background: #f9fafb;
+            padding: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        /* Goomer Logo */
+        .goomer-logo {
+            background: #ffffff;
+            border: 2px solid #3b82f6;
+        }
+
+        .goomer-logo .logo-text {
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: #3b82f6;
+            text-transform: lowercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* OlaClick Logo */
+        .olaclick-logo {
+            background: #3b82f6;
+            flex-direction: column;
+            padding: 6px;
+        }
+
+        .olaclick-logo .logo-text {
+            font-size: 0.6rem;
+            font-weight: 500;
+            color: #ffffff;
+            text-transform: lowercase;
+            line-height: 1;
+        }
+
+        .olaclick-logo .sparkle {
+            position: absolute;
+            top: 4px;
+            right: 4px;
+            font-size: 0.5rem;
+            color: #10b981;
+        }
+
+        /* Abrahão Logo */
+        .abrahao-logo {
+            background: #ffffff;
+            border: 2px solid #ef4444;
+            flex-direction: column;
+            padding: 6px;
+        }
+
+        .abrahao-logo .logo-icon {
+            font-size: 1rem;
+            color: #ef4444;
+            font-weight: bold;
+            margin-bottom: 2px;
+        }
+
+        .abrahao-logo .logo-text {
+            font-size: 0.5rem;
+            font-weight: 600;
+            color: #ef4444;
+            text-transform: lowercase;
+            line-height: 1;
+        }
+
+        /* BeeFood Logo */
+        .beefood-logo {
+            background: #ffffff;
+            border: 2px solid #f59e0b;
+            padding: 4px;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .bee-icon {
+            position: relative;
+            width: 32px;
+            height: 24px;
+            margin-bottom: 4px;
+        }
+
+        .bee-head {
+            width: 8px;
+            height: 8px;
+            background: #000000;
+            border-radius: 2px;
+            position: absolute;
+            top: 0;
+            left: 12px;
+        }
+
+        .bee-body {
+            width: 20px;
+            height: 16px;
+            background: #ffffff;
+            border: 2px solid #000000;
+            border-radius: 8px;
+            position: absolute;
+            top: 6px;
+            left: 6px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+            padding: 2px;
+        }
+
+        .bee-stripe {
+            width: 100%;
+            height: 2px;
+            background: #fbbf24;
+            border-radius: 1px;
+        }
+
+        .bee-wing-left {
+            width: 6px;
+            height: 6px;
+            background: #ffffff;
+            border: 1px solid #000000;
+            border-radius: 2px;
+            position: absolute;
+            top: 4px;
+            left: 2px;
+            transform: rotate(-15deg);
+        }
+
+        .bee-wing-right {
+            width: 6px;
+            height: 6px;
+            background: #ffffff;
+            border: 1px solid #000000;
+            border-radius: 2px;
+            position: absolute;
+            top: 4px;
+            right: 2px;
+            transform: rotate(15deg);
+        }
+
+        .logo-texts {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .bee-text {
+            font-size: 0.5rem;
+            font-weight: 700;
+            color: #000000;
+            text-transform: uppercase;
+            line-height: 1;
+            margin-bottom: 1px;
+        }
+
+        .food-text {
+            font-size: 0.5rem;
+            font-weight: 700;
+            color: #ef4444;
+            text-transform: lowercase;
+            line-height: 1;
+        }
+        
+        .comp-title { 
+            font-size: 1.25rem; 
+            font-weight: 600; 
+            color: #111827; 
+            margin-bottom: 4px;
+        }
+        
+        .comp-subtitle { 
+            font-size: 0.875rem; 
+            color: #6b7280; 
+            font-weight: 400;
+        }
+        
+        .comp-description { 
+            font-size: 0.95rem; 
+            color: #4b5563; 
+            margin-top: 16px; 
+            line-height: 1.6;
+        }
+
+        /* Cores dos Cards - Minimalistas */
+        .goomer::before { background: linear-gradient(135deg, #ec4899, #be185d); }
+        .goomer:hover { border-color: #ec4899; }
+        
+        .olaclick::before { background: linear-gradient(135deg, #10b981, #059669); }
+        .olaclick:hover { border-color: #10b981; }
+        
+        .abrahao::before { background: linear-gradient(135deg, #f59e0b, #d97706); }
+        .abrahao:hover { border-color: #f59e0b; }
+        
+        .beefood::before { background: linear-gradient(135deg, #3b82f6, #2563eb); }
+        .beefood:hover { border-color: #3b82f6; }
+        
+        /* Destaque da Lacuna */
+        .gap-analysis { 
+            margin-top: 60px; 
+            background: linear-gradient(135deg, #fef3c7, #fde68a); 
+            border: none; 
+            padding: 40px; 
+            border-radius: 20px; 
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .gap-analysis::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(249, 115, 22, 0.1), rgba(239, 68, 68, 0.1));
+            z-index: 0;
+        }
+        
+        .gap-analysis > * {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .gap-analysis p { 
+            font-size: 1.5rem; 
+            font-weight: 700; 
+            color: #92400e; 
+            margin: 0 0 16px 0; 
+        }
+        
+        .gap-analysis span { 
+            font-size: 1rem; 
+            display: block; 
+            margin-top: 16px; 
+            color: #6b7280; 
+            font-weight: 400;
+        }
+        
+        .gap-highlight { 
+            color: #059669; 
+            font-weight: 600; 
+            margin-top: 20px; 
+            display: block;
+            font-size: 1.125rem;
+        }
+
+        /* Solução Proposta */
+        .solution-section {
+            margin-top: 60px;
+        }
+
+        .solution-title {
+            color: #374151;
+            font-size: 1.75rem;
+            font-weight: 600;
+            margin-bottom: 32px;
+            text-align: center;
+            position: relative;
+        }
+
+        .solution-title::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 3px;
+            background: linear-gradient(135deg, #f97316, #ef4444);
+            border-radius: 2px;
+        }
+
+        .solution-card {
+            background: linear-gradient(135deg, #f0f9ff, #e0f2fe);
+            border: 1px solid #bae6fd;
+            border-radius: 20px;
+            padding: 40px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .solution-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(249, 115, 22, 0.05), rgba(239, 68, 68, 0.05));
+            z-index: 0;
+        }
+
+        .solution-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 40px rgba(249, 115, 22, 0.15);
+            border-color: #f97316;
+        }
+
+        .solution-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .solution-text {
+            font-size: 1.125rem;
+            color: #374151;
+            line-height: 1.7;
+            margin-bottom: 24px;
+            text-align: justify;
+        }
+
+        .solution-text:last-child {
+            margin-bottom: 0;
+        }
+
+        .solution-text strong {
+            color: #f97316;
+            font-weight: 600;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 24px;
+                margin: 10px;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .competitor-grid {
+                grid-template-columns: 1fr;
+                gap: 16px;
+            }
+            
+            .competitor-card {
+                padding: 24px;
+            }
+            
+            .solution-card {
+                padding: 24px;
+            }
+            
+            .solution-title {
+                font-size: 1.5rem;
+            }
+            
+            .solution-text {
+                font-size: 1rem;
+                text-align: left;
+            }
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Análise de Concorrentes: Soluções de Cardápio Digital no Brasil</h1>
+        
+        <p class="intro-text">
+            O mercado de alimentação já é digitalizado. Os principais <em>players</em> oferecem praticidade e redução de custos. A análise a seguir mostra onde eles se destacam e, crucialmente, onde o <strong>oMenu</strong> encontra sua oportunidade.
+        </p>
+
+        <div class="competitor-grid">
+            
+            <div class="competitor-card goomer">
+                <div class="logo-section">
+                    <div class="logo-placeholder goomer-logo">
+                        <span class="logo-text">goomer</span>
+                    </div>
+                    <div>
+                        <div class="comp-title">Goomer</div>
+                        <div class="comp-subtitle">Pioneira em Pedidos e Gestão</div>
+                    </div>
+                </div>
+                <div class="comp-description">
+                    Pioneira no país, com forte <strong>integração ao delivery e gestão completa de pedidos</strong>. Foco em grandes volumes e otimização do fluxo de trabalho do restaurante.
+                </div>
+            </div>
+
+            <div class="competitor-card olaclick">
+                <div class="logo-section">
+                    <div class="logo-placeholder olaclick-logo">
+                        <span class="logo-text">ola</span>
+                        <span class="logo-text">click</span>
+                        <span class="sparkle">✨</span>
+                    </div>
+                    <div>
+                        <div class="comp-title">OlaClick</div>
+                        <div class="comp-subtitle">Foco em Pequenos Estabelecimentos</div>
+                    </div>
+                </div>
+                <div class="comp-description">
+                    Voltada a pequenos e médios estabelecimentos, com uma proposta <strong>simples, acessível e rápida</strong> de configurar o cardápio via WhatsApp.
+                </div>
+            </div>
+
+            <div class="competitor-card abrahao">
+                <div class="logo-section">
+                    <div class="logo-placeholder abrahao-logo">
+                        <span class="logo-icon">↗</span>
+                        <span class="logo-text">abrahão</span>
+                    </div>
+                    <div>
+                        <div class="comp-title">Abrahão</div>
+                        <div class="comp-subtitle">Inteligência e Relatórios de Desempenho</div>
+                    </div>
+                </div>
+                <div class="comp-description">
+                    Foca em cardápios digitais <strong>inteligentes</strong> e na geração de <strong>relatórios de desempenho e BI</strong> (Business Intelligence) para otimizar as vendas e o mix de produtos.
+                </div>
+            </div>
+
+            <div class="competitor-card beefood">
+                <div class="logo-section">
+                    <div class="logo-placeholder beefood-logo">
+                        <div class="bee-icon">
+                            <div class="bee-head"></div>
+                            <div class="bee-body">
+                                <div class="bee-stripe"></div>
+                                <div class="bee-stripe"></div>
+                            </div>
+                            <div class="bee-wing bee-wing-left"></div>
+                            <div class="bee-wing bee-wing-right"></div>
+                        </div>
+                        <div class="logo-texts">
+                            <span class="logo-text bee-text">BEE</span>
+                            <span class="logo-text food-text">food</span>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="comp-title">BeeFood</div>
+                        <div class="comp-subtitle">Solução Regionalizada e Acessível</div>
+                    </div>
+                </div>
+                <div class="comp-description">
+                    Solução regionalizada, <strong>acessível a restaurantes de menor porte</strong> e que buscam uma ferramenta básica para digitalizar seu menu.
+                </div>
+            </div>
+        </div>
+        
+        <div class="gap-analysis">
+            <p>Lacuna da Concorrência: Acessibilidade Universal</p>
+            <span style="font-size: 15px; color: #555;">Embora estas soluções tragam praticidade e alinhamento digital, <strong>todas apresentam limitações em acessibilidade plena</strong>, falhando em contemplar de forma robusta clientes com deficiência visual (Leitura por Voz, Contraste, Navegação Tátil).</span>
+            <span class="gap-highlight">É aqui que o <strong>oMenu</strong> cria seu Diferencial Competitivo.</span>
+        </div>
+
+        <!-- Solução Proposta -->
+        <div class="solution-section">
+            <h2 class="solution-title">Solução Proposta</h2>
+            <div class="solution-card">
+                <div class="solution-content">
+                    <p class="solution-text">
+                        Nossa solução é um <strong>cardápio digital inclusivo e acessível</strong>, projetado para atender tanto pessoas com deficiência visual quanto consumidores sem deficiência. Com recursos de voz, alto contraste e compatibilidade com leitores de tela, oferecemos autonomia e independência a quem antes dependia de terceiros para escolher suas refeições.
+                    </p>
+                    <p class="solution-text">
+                        Para os demais clientes, entregamos uma experiência moderna, prática e intuitiva, com design responsivo e fácil integração ao atendimento. Assim, unimos acessibilidade e inovação em uma ferramenta única, capaz de transformar a experiência em restaurantes, bares e lanchonetes.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</body>
+</html>

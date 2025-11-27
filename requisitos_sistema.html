@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Documento de Requisitos do Sistema (DRS) - oMenu</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <style>
+        /* Estilos Baseados nos arquivos anteriores (imersao.html, ideacao.html) */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body { 
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; 
+            background: linear-gradient(135deg, #fef3c7 0%, #fed7aa 50%, #fecaca 100%);
+            padding: 20px;
+            line-height: 1.6;
+            color: #374151;
+            min-height: 100vh;
+        }
+        
+        .container { 
+            max-width: 1200px; 
+            margin: 0 auto; 
+            background-color: #ffffff; 
+            padding: 40px; 
+            border-radius: 20px; 
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+        }
+        
+        h1 { 
+            text-align: center; 
+            background: linear-gradient(135deg, #f97316 0%, #ef4444 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-size: 2.5em; 
+            margin-bottom: 5px;
+            font-weight: 800;
+        }
+        
+        h2 { 
+            color: #1f2937; 
+            font-size: 1.8em; 
+            margin-top: 30px; 
+            margin-bottom: 15px;
+            padding-bottom: 5px;
+            border-bottom: 2px solid #e5e7eb;
+            font-weight: 700;
+        }
+
+        h3 {
+            color: #4b5563;
+            font-size: 1.4em;
+            margin-top: 20px;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+        
+        .metadata-table, .req-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 30px;
+        }
+
+        .metadata-table th, .metadata-table td,
+        .req-table th, .req-table td {
+            padding: 12px 15px;
+            text-align: left;
+            border: 1px solid #d1d5db; /* Cor de borda clara */
+        }
+
+        .metadata-table th, .req-table th {
+            background-color: #f3f4f6; /* Fundo mais claro para cabeçalhos */
+            color: #1f2937;
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 0.9em;
+        }
+
+        .req-table tbody tr:nth-child(even) {
+            background-color: #f9fafb; /* Linhas zebradas para facilitar a leitura */
+        }
+
+        .metadata-title {
+            text-align: center;
+            font-size: 1.2em;
+            color: #4b5563;
+            margin-top: -15px;
+            margin-bottom: 25px;
+            font-weight: 500;
+        }
+        
+        .priority-critical {
+            font-weight: 700;
+            color: #dc2626; /* Vermelho para Crítico */
+        }
+
+        .priority-alta {
+            font-weight: 600;
+            color: #f59e0b; /* Laranja para Alta */
+        }
+
+        .priority-media {
+            color: #3b82f6; /* Azul para Média */
+        }
+        
+        .intro-text {
+            font-size: 1.1em;
+            color: #6b7280;
+            text-align: center;
+            margin-bottom: 30px;
+            line-height: 1.7;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Documento de Requisitos do Sistema (DRS)</h1>
+        <div class="metadata-title">Projeto: oMenu - Cardápio Digital Acessível</div>
+        
+        <div class="intro-text">
+            <p>Este documento define os requisitos funcionais e não funcionais do sistema oMenu, estabelecendo as bases técnicas e de acessibilidade para o desenvolvimento da plataforma de cardápio digital inclusivo.</p>
+        </div>
+        
+        <table class="metadata-table">
+            <thead>
+                <tr>
+                    <th style="width: 25%;">Detalhe</th>
+                    <th>Descrição</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><b>Versão</b></td>
+                    <td>1.0</td>
+                </tr>
+                <tr>
+                    <td><b>Data</b></td>
+                    <td>11 de Outubro de 2025</td>
+                </tr>
+                <tr>
+                    <td><b>Metodologia Adotada</b></td>
+                    <td>SDLC (Ciclo de Vida) e <b>DevOps</b> (Desenvolvimento)</td>
+                </tr>
+                <tr>
+                    <td><b>Tecnologias-Chave</b></td>
+                    <td><b>PostgreSQL</b>, Python/<b>Django Rest Framework</b>, <b>React</b>, Redis (Cache)</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <hr style="border: 0; border-top: 1px solid #e5e7eb; margin: 30px 0;">
+
+        <h2>1. Requisitos Funcionais (RF)</h2>
+        <p>Os Requisitos Funcionais (RF) definem o que o sistema <b>deve fazer</b> para entregar valor aos seus usuários.</p>
+
+        <h3>RF.01: Módulo do Cardápio (Interface do Usuário Final)</h3>
+        <table class="req-table">
+            <thead>
+                <tr>
+                    <th style="width: 10%;">ID</th>
+                    <th style="width: 70%;">Requisito Funcional</th>
+                    <th style="width: 20%;">Prioridade</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>RF.01.01</td>
+                    <td>O sistema deve exibir o cardápio em duas versões: <b>Modo Acessibilidade (PCD)</b> e <b>Modo Padrão (Geral)</b>.</td>
+                    <td class="priority-critical">Crítica</td>
+                </tr>
+                <tr>
+                    <td>RF.01.02</td>
+                    <td>O cardápio deve permitir a visualização de <b>fotos realistas</b> e a <b>descrição completa</b> de cada item.</td>
+                    <td class="priority-alta">Alta</td>
+                </tr>
+                <tr>
+                    <td>RF.01.03</td>
+                    <td>O usuário deve conseguir adicionar, remover e ajustar a quantidade de itens no seu carrinho (cesta de pedidos).</td>
+                    <td class="priority-critical">Crítica</td>
+                </tr>
+                <tr>
+                    <td>RF.01.04</td>
+                    <td>O sistema deve permitir a seleção de <b>opção de pagamento</b> (e.g., Pagar na Mesa, Pagar no Caixa, ou métodos digitais integrados) antes do envio do pedido.</td>
+                    <td class="priority-alta">Alta</td>
+                </tr>
+                <tr>
+                    <td>RF.01.05</td>
+                    <td>O usuário deve conseguir <b>enviar o pedido</b> para a Cozinha/Copa em tempo real, com confirmação visual/auditiva.</td>
+                    <td class="priority-critical">Crítica</td>
+                </tr>
+                <tr>
+                    <td>RF.01.06</td>
+                    <td>O sistema deve permitir que o usuário <b>acompanhe o status do pedido</b> em tempo real (Enviado, Em Preparo, Pronto, Entregue).</td>
+                    <td class="priority-alta">Alta</td>
+                </tr>
+                <tr>
+                    <td>RF.01.07</td>
+                    <td>O sistema deve oferecer a opção de <b>Chamar Garçom</b> (por meio de sinalização para o Painel Operacional).</td>
+                    <td class="priority-media">Média</td>
+                </tr>
+                <tr>
+                    <td>RF.01.08</td>
+                    <td>O cardápio deve ser <b>acessível por QR Code</b> e/ou <b>link via WhatsApp</b>.</td>
+                    <td class="priority-alta">Alta</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3>RF.02: Módulo Operacional (Salão, Cozinha e Copa)</h3>
+        <table class="req-table">
+            <thead>
+                <tr>
+                    <th style="width: 10%;">ID</th>
+                    <th style="width: 70%;">Requisito Funcional</th>
+                    <th style="width: 20%;">Prioridade</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>RF.02.01</td>
+                    <td>O sistema deve ter um <b>Painel de Controle do Salão</b> que exiba a <b>visualização em *layout* das mesas</b> (Mapa de Mesas).</td>
+                    <td class="priority-critical">Crítica</td>
+                </tr>
+                <tr>
+                    <td>RF.02.02</td>
+                    <td>O Painel de Mesas deve exibir o <b>status em tempo real</b> de cada mesa (Livre, Ocupada, Aguardando Pedido, Precisa de Ajuda).</td>
+                    <td class="priority-critical">Crítica</td>
+                </tr>
+                <tr>
+                    <td>RF.02.03</td>
+                    <td>O sistema deve gerar <b>telas de *display* específicas para Cozinha e Copa</b> que exibam os novos pedidos em tempo real.</td>
+                    <td class="priority-critical">Crítica</td>
+                </tr>
+                <tr>
+                    <td>RF.02.04</td>
+                    <td>A equipe da Cozinha/Copa deve conseguir <b>alterar o status do pedido</b> (e.g., de 'Em Preparo' para 'Pronto' ou 'Entregue').</td>
+                    <td class="priority-critical">Crítica</td>
+                </tr>
+                <tr>
+                    <td>RF.02.05</td>
+                    <td>O sistema deve permitir que o administrador do restaurante <b>insira e gerencie todo o *layout* do cardápio</b> (CRUD de Categorias, Produtos, Preços, Descrições e Fotos).</td>
+                    <td class="priority-critical">Crítica</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3>RF.03: Módulo de Autenticação e Gestão B2B (SaaS)</h3>
+        <table class="req-table">
+            <thead>
+                <tr>
+                    <th style="width: 10%;">ID</th>
+                    <th style="width: 70%;">Requisito Funcional</th>
+                    <th style="width: 20%;">Prioridade</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>RF.03.01</td>
+                    <td>O sistema deve gerenciar o <b>acesso por múltiplos perfis</b> (Gerente, Garçom, Cozinha, Administrador do Sistema).</td>
+                    <td class="priority-critical">Crítica</td>
+                </tr>
+                <tr>
+                    <td>RF.03.02</td>
+                    <td>O módulo administrativo deve permitir a <b>gestão de planos de assinatura SaaS</b> e faturamento do cliente B2B.</td>
+                    <td class="priority-alta">Alta</td>
+                </tr>
+                <tr>
+                    <td>RF.03.03</td>
+                    <td>O sistema deve gerar relatórios básicos de vendas, pedidos e itens mais consumidos.</td>
+                    <td class="priority-media">Média</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <hr style="border: 0; border-top: 1px solid #e5e7eb; margin: 30px 0;">
+
+        <h2>2. Requisitos Não Funcionais (RNF)</h2>
+        <p>Os Requisitos Não Funcionais definem as qualidades, restrições e o ambiente técnico do sistema, com foco especial na qualidade de <b>Acessibilidade</b>.</p>
+
+        <h3>RNF.01: Acessibilidade e Usabilidade (Qualidade Crítica do Projeto)</h3>
+        <table class="req-table">
+            <thead>
+                <tr>
+                    <th style="width: 15%;">ID</th>
+                    <th style="width: 30%;">Requisito Não Funcional</th>
+                    <th style="width: 55%;">Descrição</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>RNF.01.01</td>
+                    <td><b>Leitura por Voz Integrada</b></td>
+                    <td>O sistema deve ter um recurso de <b>leitura por voz nativa</b> do cardápio e ser compatível com *screen readers* do sistema operacional.</td>
+                </tr>
+                <tr>
+                    <td>RNF.01.02</td>
+                    <td><b>Compatibilidade com Leitores de Tela</b></td>
+                    <td>O *frontend* (React) deve ser <b>100% compatível</b> (A11y/ARIA) com tecnologias assistivas como <b>TalkBack</b> e <b>VoiceOver</b>.</td>
+                </tr>
+                <tr>
+                    <td>RNF.01.03</td>
+                    <td><b>Modo Alto Contraste</b></td>
+                    <td>O sistema deve oferecer a opção de <b>Modo Alto Contraste</b> para clientes com baixa visão.</td>
+                </tr>
+                <tr>
+                    <td>RNF.01.04</td>
+                    <td><b>Modo Daltonismo</b></td>
+                    <td>O sistema deve oferecer um <b>Modo Otimizado para Daltonismo</b>, ajustando as paletas de cores.</td>
+                </tr>
+                <tr>
+                    <td>RNF.01.05</td>
+                    <td><b>Ajuste de Fonte Total</b></td>
+                    <td>O usuário deve ter a opção de <b>aumentar/diminuir o tamanho da fonte</b>, com suporte para fontes de até <b>24px</b>, sem quebrar o layout (<b>Design Universal</b>).</td>
+                </tr>
+                <tr>
+                    <td>RNF.01.06</td>
+                    <td><b>Navegação Simples</b></td>
+                    <td>A navegação deve ser objetiva e intuitiva, com <b>filtros e pesquisa</b> por texto.</td>
+                </tr>
+                <tr>
+                    <td>RNF.01.07</td>
+                    <td><b>Orientação e Wayfinding</b></td>
+                    <td>O sistema deve ter uma funcionalidade para <b>ajudar o usuário a se orientar no salão</b> e identificar uma mesa livre (conectado ao RF.02.01).</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3>RNF.02: Desempenho e Confiabilidade</h3>
+        <table class="req-table">
+            <thead>
+                <tr>
+                    <th style="width: 15%;">ID</th>
+                    <th style="width: 30%;">Requisito Não Funcional</th>
+                    <th style="width: 55%;">Descrição</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>RNF.02.01</td>
+                    <td><b>Latência de Pedidos</b></td>
+                    <td>O tempo de transmissão do pedido do cliente para a Cozinha/Copa <b>não deve exceder 2 segundos</b>.</td>
+                </tr>
+                <tr>
+                    <td>RNF.02.02</td>
+                    <td><b>Confiabilidade (*Uptime*)</b></td>
+                    <td>O sistema deve garantir uma <b>disponibilidade mínima de 99.8%</b>.</td>
+                </tr>
+                <tr>
+                    <td>RNF.02.03</td>
+                    <td><b>Escalabilidade</b></td>
+                    <td>A arquitetura deve suportar picos de uso (ex: fins de semana), com capacidade de integrar <b>Redis</b> para *caching*.</td>
+                </tr>
+                <tr>
+                    <td>RNF.02.04</td>
+                    <td><b>Tempo de Resposta do Front</b></td>
+                    <td>O tempo de carregamento e resposta da interface do cardápio (React) deve ser <b>inferior a 1.5 segundos</b>.</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3>RNF.03: Restrições e Ambiente Técnico (RNF.TEC)</h3>
+        <table class="req-table">
+            <thead>
+                <tr>
+                    <th style="width: 15%;">ID</th>
+                    <th style="width: 30%;">Requisito Não Funcional</th>
+                    <th style="width: 55%;">Descrição</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>RNF.TEC.01</td>
+                    <td><b>Banco de Dados</b></td>
+                    <td>O sistema deve utilizar o <b>PostgreSQL</b> para persistência de dados.</td>
+                </tr>
+                <tr>
+                    <td>RNF.TEC.02</td>
+                    <td><b>Backend/API</b></td>
+                    <td>O *backend* deve ser desenvolvido em <b>Python</b> utilizando o <b>Django Rest Framework</b>.</td>
+                </tr>
+                <tr>
+                    <td>RNF.TEC.03</td>
+                    <td><b>Frontend/Interface</b></td>
+                    <td>O *frontend* deve ser desenvolvido em <b>React</b>.</td>
+                </tr>
+                <tr>
+                    <td>RNF.TEC.04</td>
+                    <td><b>Arquitetura de Desenvolvimento</b></td>
+                    <td>O projeto deve aderir à metodologia <b>DevOps</b>, com <b>Integração Contínua (CI)</b> e <b>Testes Contínuos</b>.</td>
+                </tr>
+                <tr>
+                    <td>RNF.TEC.05</td>
+                    <td><b>Cache</b></td>
+                    <td>O sistema deve prever a integração do <b>Redis</b> como camada de <b>caching</b> e gerenciamento de sessões, se necessário para otimização.</td>
+                </tr>
+            </tbody>
+        </table>
+
+    </div>
+</body>
+</html>

@@ -11,7 +11,8 @@ import {
   DollarSign, 
   Clock,
   UtensilsCrossed,
-  ArrowRight
+  ArrowRight,
+  Accessibility
 } from 'lucide-react';
 import './styles.css';
 
@@ -127,6 +128,15 @@ const Home: React.FC = () => {
                 onClick={() => navigate('/produtos')}
               >
                 Ver Cardápio
+              </Button>
+              <Button
+                size="lg"
+                variant="outline"
+                onClick={() => navigate('/acessibilidade')}
+                className="accessibility-button"
+              >
+                Modo Acessibilidade
+                <Accessibility className="button-icon" />
               </Button>
             </div>
           </div>
@@ -318,6 +328,13 @@ const Home: React.FC = () => {
               className="primary-button"
             >
               Ver Cardápio
+            </Button>
+            <Button
+              variant="outline"
+              onClick={() => navigate('/acessibilidade')}
+              className="accessibility-button"
+            >
+              Modo Acessibilidade
             </Button>
             <Button 
               variant="outline"

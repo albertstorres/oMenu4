@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, createContext, useContext } from 'react';
 import './select.css';
 
 interface SelectProps {
@@ -25,10 +25,25 @@ interface SelectItemProps {
   children: React.ReactNode;
 }
 
+interface SelectContextType {
+  selectedValue: string;
+  isOpen: boolean;
+  setIsOpen: (open: boolean) => void;
+  handleItemClick: (value: string) => void;
+}
+
+const SelectContext = createContext<SelectContextType | null>(null);
+
 const Select: React.FC<SelectProps> = ({ children, value, onValueChange }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedValue, setSelectedValue] = useState(value || '');
   const selectRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (value !== undefined) {
+      setSelectedValue(value);
+    }
+  }, [value]);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -37,9 +52,11 @@ const Select: React.FC<SelectProps> = ({ children, value, onValueChange }) => {
       }
     };
 
-    document.addEventListener('mousedown', handleClickOutside);
+    if (isOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
     return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, []);
+  }, [isOpen]);
 
   const handleItemClick = (itemValue: string) => {
     setSelectedValue(itemValue);
@@ -47,26 +64,37 @@ const Select: React.FC<SelectProps> = ({ children, value, onValueChange }) => {
     setIsOpen(false);
   };
 
+  const contextValue: SelectContextType = {
+    selectedValue,
+    isOpen,
+    setIsOpen,
+    handleItemClick
+  };
+
   return (
-    <div className="select" ref={selectRef}>
-      {React.Children.map(children, (child) => {
-        if (React.isValidElement(child)) {
-          if (child.type === SelectTrigger) {
-            return React.cloneElement(child, { 
-              onClick: () => setIsOpen(!isOpen),
-              isOpen 
-            } as any);
+    <SelectContext.Provider value={contextValue}>
+      <div className="select" ref={selectRef}>
+        {React.Children.map(children, (child) => {
+          if (React.isValidElement(child)) {
+            if (child.type === SelectTrigger) {
+              return React.cloneElement(child, { 
+                onClick: () => setIsOpen(!isOpen),
+                isOpen 
+              } as any);
+            }
+            if (child.type === SelectContent) {
+              // Só renderiza o conteúdo quando estiver aberto
+              if (isOpen) {
+                return child;
+              }
+              // Retorna null quando fechado para não renderizar
+              return null;
+            }
           }
-          if (child.type === SelectContent && isOpen) {
-            return React.cloneElement(child, { 
-              onItemClick: handleItemClick,
-              selectedValue 
-            } as any);
-          }
-        }
-        return child;
-      })}
-    </div>
+          return child;
+        })}
+      </div>
+    </SelectContext.Provider>
   );
 };
 
@@ -86,18 +114,17 @@ const SelectTrigger: React.FC<SelectTriggerProps & { onClick?: () => void; isOpe
   );
 };
 
-const SelectContent: React.FC<SelectContentProps & { onItemClick?: (value: string) => void; selectedValue?: string }> = ({ 
-  children, 
-  onItemClick,
-  selectedValue 
-}) => {
+const SelectContent: React.FC<SelectContentProps> = ({ children }) => {
+  const context = useContext(SelectContext);
+  if (!context) return null;
+
   return (
     <div className="select-content">
       {React.Children.map(children, (child) => {
         if (React.isValidElement(child) && child.type === SelectItem) {
           return React.cloneElement(child, { 
-            onClick: () => onItemClick?.(child.props.value),
-            isSelected: child.props.value === selectedValue
+            onClick: () => context.handleItemClick(child.props.value),
+            isSelected: child.props.value === context.selectedValue
           } as any);
         }
         return child;
@@ -122,9 +149,12 @@ const SelectItem: React.FC<SelectItemProps & { onClick?: () => void; isSelected?
 };
 
 const SelectValue: React.FC<SelectValueProps> = ({ placeholder }) => {
+  const context = useContext(SelectContext);
+  const displayValue = context?.selectedValue || placeholder;
+  
   return (
     <span className="select-value">
-      {placeholder}
+      {displayValue}
     </span>
   );
 };

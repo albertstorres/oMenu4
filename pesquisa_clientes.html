@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard de Análise da Pesquisa - CardápioDigital</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body { 
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; 
+            background: linear-gradient(135deg, #f9fafb 0%, #f3f4f6 100%);
+            padding: 20px;
+            line-height: 1.6;
+            color: #374151;
+        }
+        
+        .container { 
+            max-width: 1200px; 
+            margin: 0 auto; 
+            background-color: #ffffff; 
+            padding: 40px; 
+            border-radius: 20px; 
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+        }
+        
+        h1 { 
+            text-align: center; 
+            color: #111827; 
+            margin-bottom: 16px; 
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #f97316, #ef4444);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .intro-text { 
+            text-align: center; 
+            font-size: 1.125rem; 
+            color: #6b7280; 
+            margin-bottom: 48px; 
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            font-style: italic;
+        }
+
+        .charts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 24px;
+            margin-bottom: 32px;
+        }
+
+        .chart-box {
+            background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+            border: 2px solid #e2e8f0;
+            border-radius: 16px;
+            padding: 24px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .chart-box:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12);
+            border-color: #cbd5e1;
+        }
+
+        .chart-box::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #3b82f6, #10b981, #f59e0b, #ef4444);
+        }
+
+        .chart-title {
+            color: #1f2937;
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid #e5e7eb;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .chart-icon {
+            width: 24px;
+            height: 24px;
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .bar-container {
+            margin-bottom: 16px;
+        }
+
+        .bar-label {
+            font-weight: 500;
+            color: #4b5563;
+            margin-bottom: 8px;
+            font-size: 0.875rem;
+        }
+
+        .bar-progress {
+            height: 32px;
+            line-height: 32px;
+            color: white;
+            text-align: right;
+            padding-right: 12px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.875rem;
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            transition: all 0.3s ease;
+        }
+
+        .bar-low {
+            background: linear-gradient(135deg, #ef4444, #dc2626) !important;
+        }
+        .bar-medium {
+            background: linear-gradient(135deg, #f59e0b, #d97706) !important;
+        }
+        .bar-high {
+            background: linear-gradient(135deg, #10b981, #059669) !important;
+        }
+
+        .insight-box {
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            border-left: 4px solid #3b82f6;
+            padding: 16px;
+            border-radius: 8px;
+            margin-top: 16px;
+        }
+
+        .insight-text {
+            font-size: 0.875rem;
+            color: #1e40af;
+            font-weight: 500;
+        }
+
+        .insight-text .highlight {
+            color: #1d4ed8;
+            font-weight: 600;
+        }
+
+        .word-cloud-container {
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            border: 2px dashed #cbd5e1;
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            margin: 16px 0;
+        }
+
+        .tag-item {
+            display: inline-block;
+            margin: 6px;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: 600;
+            color: white;
+            transition: all 0.3s ease;
+        }
+
+        .tag-item:hover {
+            transform: scale(1.05);
+        }
+
+        .tag-big { 
+            font-size: 1rem; 
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+        }
+        .tag-medium { 
+            font-size: 0.875rem; 
+            background: linear-gradient(135deg, #10b981, #059669);
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+        }
+        .tag-small { 
+            font-size: 0.75rem; 
+            background: linear-gradient(135deg, #6b7280, #4b5563);
+            box-shadow: 0 4px 12px rgba(107, 114, 128, 0.3);
+        }
+
+        /* Responsividade */
+        @media (max-width: 768px) {
+            .container {
+                padding: 24px;
+                margin: 10px;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .charts-grid {
+                grid-template-columns: 1fr;
+                gap: 16px;
+            }
+            
+            .chart-box {
+                padding: 20px;
+            }
+            
+            .chart-title {
+                font-size: 1.125rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Dashboard de Análise da Pesquisa - oMenu</h1>
+        <p class="intro-text">Dados detalhados sobre a situação atual dos cardápios em estabelecimentos.</p>
+        
+        <div class="charts-grid">
+            <div class="chart-box">
+                <div class="chart-title">
+                    <div class="chart-icon">📋</div>
+                    Tipo de Cardápio Utilizado
+                </div>
+                
+                <div class="bar-container">
+                    <div class="bar-label">Impresso (8/20 = 40.0%)</div>
+                    <div class="bar-progress bar-medium" style="width: 40.0%;">40.0%</div>
+                </div>
+
+                <div class="bar-container">
+                    <div class="bar-label">Digital (5/20 = 25.0%)</div>
+                    <div class="bar-progress" style="width: 25.0%;">25.0%</div>
+                </div>
+
+                <div class="bar-container">
+                    <div class="bar-label">Ambas as Opções (7/20 = 35.0%)</div>
+                    <div class="bar-progress bar-medium" style="width: 35.0%;">35.0%</div>
+                </div>
+            </div>
+
+            <div class="chart-box">
+                <div class="chart-title">
+                    <div class="chart-icon">♿</div>
+                    Recurso de Acessibilidade Oferecido?
+                </div>
+                
+                <div class="bar-container">
+                    <div class="bar-label">Não (17/20 = 85.0%)</div>
+                    <div class="bar-progress bar-low" style="width: 85.0%;">85.0%</div>
+                </div>
+
+                <div class="bar-container">
+                    <div class="bar-label">Sim (3/20 = 15.0%)</div>
+                    <div class="bar-progress bar-high" style="width: 15.0%;">15.0%</div>
+                </div>
+
+                <div class="insight-box">
+                    <div class="insight-text">
+                        <strong>Insight Principal:</strong> 85% dos estabelecimentos pesquisados não oferecem recursos de acessibilidade, evidenciando uma grande <span class="highlight">lacuna de mercado para o CardápioDigital</span>.
+                    </div>
+                </div>
+            </div>
+
+            <div class="chart-box">
+                <div class="chart-title">
+                    <div class="chart-icon">💰</div>
+                    Aceitaria Pagar por Acessibilidade?
+                </div>
+                
+                <div class="bar-container">
+                    <div class="bar-label">Sim (6/20 = 30.0%)</div>
+                    <div class="bar-progress bar-high" style="width: 30.0%;">30.0%</div>
+                </div>
+
+                <div class="bar-container">
+                    <div class="bar-label">Não (14/20 = 70.0%)</div>
+                    <div class="bar-progress bar-low" style="width: 70.0%;">70.0%</div>
+                </div>
+
+                <div class="insight-box">
+                    <div class="insight-text">
+                        <strong>Insight Principal:</strong> 30% está disposta a pagar pelo recurso, validando a <span class="highlight">monetização B2B</span>, mesmo com a maioria (70%) não aceitando inicialmente.
+                    </div>
+                </div>
+            </div>
+
+            <div class="chart-box">
+                <div class="chart-title">
+                    <div class="chart-icon">👁️</div>
+                    Já Atendeu Cliente com Deficiência Visual?
+                </div>
+                
+                <div class="bar-container">
+                    <div class="bar-label">Sim (5/20 = 25.0%)</div>
+                    <div class="bar-progress bar-medium" style="width: 25.0%;">25.0%</div>
+                </div>
+
+                <div class="bar-container">
+                    <div class="bar-label">Não (15/20 = 75.0%)</div>
+                    <div class="bar-progress bar-low" style="width: 75.0%;">75.0%</div>
+                </div>
+            </div>
+
+            <div class="chart-box">
+                <div class="chart-title">
+                    <div class="chart-icon">⚠️</div>
+                    Desafios Atuais (Dores do Cliente)
+                </div>
+                <div class="word-cloud-container">
+                    <span class="tag-item tag-big">Custos Recorrentes</span>
+                    <span class="tag-item tag-medium">Desgaste</span>
+                    <span class="tag-item tag-big">Convencer Clientes</span>
+                    <span class="tag-item tag-medium">Atualização</span>
+                    <span class="tag-item tag-small">Acomodação</span>
+                    <span class="tag-item tag-small">Sem Recursos</span>
+                </div>
+                <div class="insight-box">
+                    <div class="insight-text">
+                        <strong>Insight:</strong> O <span class="highlight">CardápioDigital</span> resolve os principais desafios: <strong>Custo Recorrente</strong> e <strong>Desgaste</strong> do cardápio impresso.
+                    </div>
+                </div>
+            </div>
+            
+            <div class="chart-box">
+                <div class="chart-title">
+                    <div class="chart-icon">⭐</div>
+                    Requisitos do Cardápio Perfeito
+                </div>
+                <div class="word-cloud-container">
+                    <span class="tag-item tag-big">FOTOS REALISTAS</span>
+                    <span class="tag-item tag-big">DESCRIÇÃO COMPLETA</span>
+                    <span class="tag-item tag-medium">VALORES/PREÇOS</span>
+                    <span class="tag-item tag-medium">PRATICIDADE</span>
+                    <span class="tag-item tag-small">LETRA VISÍVEL</span>
+                    <span class="tag-item tag-small">OBJETIVIDADE</span>
+                </div>
+                <div class="insight-box">
+                    <div class="insight-text">
+                        <strong>Insight:</strong> A solução deve garantir todos esses elementos, adicionando a camada de <span class="highlight">Acessibilidade Inclusiva</span> (voz e alto contraste).
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

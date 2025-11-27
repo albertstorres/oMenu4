@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Análise Reclame Aqui - oMenu</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Estilos base (Baseado nos arquivos ideacao.html e imersao.html) */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body { 
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; /* Fonte padrão do projeto */
+            background: linear-gradient(135deg, #f9fafb 0%, #f3f4f6 100%); /* Fundo suave padrão */
+            padding: 20px;
+            line-height: 1.6;
+            color: #374151; /* Cor de texto principal */
+        }
+        
+        .container { 
+            max-width: 1200px; /* Largura padrão dos demais arquivos */
+            margin: 0 auto; 
+            background-color: #ffffff; 
+            padding: 40px; 
+            border-radius: 20px; /* Cantos arredondados padrão */
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08); /* Sombra padrão */
+        }
+        
+        header {
+            border-bottom: 3px solid #3b82f6; /* Cor de acento principal - Blue 500 */
+            padding-bottom: 10px;
+            margin-bottom: 25px;
+        }
+        
+        header h1 {
+            color: #111827; /* Cor escura do título */
+            font-size: 2em;
+            margin: 0;
+            text-align: center;
+        }
+        
+        header p {
+            text-align: center;
+            color: #6b7280;
+            margin-top: 5px;
+        }
+
+        h2 {
+            color: #111827;
+            border-bottom: 2px solid #e5e7eb;
+            padding-bottom: 8px;
+            margin-top: 35px;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+        }
+        
+        p {
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+        
+        /* Estilos da Tabela */
+        .opportunity-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            font-size: 0.95em;
+        }
+        .opportunity-table th, .opportunity-table td {
+            border: 1px solid #e5e7eb;
+            padding: 15px;
+            text-align: left;
+        }
+        .opportunity-table th {
+            background-color: #3b82f6; /* Cor de acento na tabela (Blue 500) */
+            color: white;
+            font-weight: 600;
+        }
+        .opportunity-table tr:nth-child(even) {
+            background-color: #f9fafb;
+        }
+        .key-point {
+            font-weight: bold;
+            color: #e74c3c; /* Cor de destaque para o diferencial CRÍTICO */
+        }
+
+        /* Estilos do Gráfico de Barras */
+        .chart-container {
+            margin-top: 40px;
+            padding: 20px 0;
+            border-top: 1px solid #e5e7eb;
+        }
+        .chart-title {
+            text-align: center;
+            font-size: 1.6em;
+            font-weight: 600;
+            margin-bottom: 30px;
+            color: #111827;
+        }
+        .bar-wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .bar-item {
+            display: flex;
+            align-items: center;
+            gap: 15px; 
+        }
+        .bar-label {
+            width: 350px; 
+            min-width: 250px;
+            font-size: 0.95em;
+            font-weight: 500;
+            color: #1f2937;
+        }
+        .bar-graph-area {
+            flex-grow: 1;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .bar-graph {
+            flex-grow: 1;
+            height: 30px; 
+            background-color: #e5e7eb; /* Cor de fundo da barra */
+            border-radius: 4px;
+            overflow: hidden;
+            position: relative;
+        }
+        .bar {
+            height: 100%;
+            background-color: #3b82f6; /* Cor da barra padrão (Blue 500) */
+            transition: width 1s ease-out;
+            border-radius: 4px;
+        }
+        .bar.critical {
+            background-color: #e74c3c; /* Cor de destaque (Alert Red) */
+        }
+        .bar-percentage {
+            font-weight: 600;
+            color: #3b82f6;
+            width: 45px; 
+            text-align: right;
+            font-size: 1.05em;
+        }
+        .bar.critical + .bar-percentage {
+            color: #e74c3c;
+        }
+        
+        /* Definição das Larguras (em porcentagem) */
+        .w-100 { width: 100%; }
+        .w-95 { width: 95%; }
+        .w-80 { width: 80%; }
+        .w-65 { width: 65%; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>Análise de Concorrência (Reclame AQUI)</h1>
+        <p>oMenu | Estratégia de Produto e Serviço</p>
+    </header>
+
+    <p>A análise foca nas queixas mais recorrentes contra concorrentes como <b>Goomer</b>, <b>OlaClick</b>, <b>Abrahão</b> e <b>BeeFood</b> para identificar as falhas de mercado que o <b>oMenu</b> pode capitalizar. As principais dores dos clientes (estabelecimentos B2B) estão na <b>qualidade do serviço</b> e na <b>estabilidade</b>.</p>
+
+    <div class="chart-container">
+        <div class="chart-title">Queixas Mais Repetidas dos Concorrentes (Oportunidades para o <b>oMenu</b>)</div>
+        <div class="bar-wrapper">
+
+            <div class="bar-item">
+                <div class="bar-label">1. <b>Ausência de Acessibilidade Plena</b> (Falha de Mercado)</div>
+                <div class="bar-graph-area">
+                    <div class="bar-graph"><div class="bar w-100 critical" title="100% - Oportunidade Crítica"></div></div>
+                    <div class="bar-percentage">100%</div>
+                </div>
+            </div>
+
+            <div class="bar-item">
+                <div class="bar-label">2. <b>Suporte e Atendimento Técnico</b> Lento/Ineficaz</div>
+                <div class="bar-graph-area">
+                    <div class="bar-graph"><div class="bar w-95" title="95% - Alta Frequência"></div></div>
+                    <div class="bar-percentage">95%</div>
+                </div>
+            </div>
+            
+            <div class="bar-item">
+                <div class="bar-label">3. <b>Falhas no Sistema/Instabilidade</b> (Pedidos Perdidos)</div>
+                <div class="bar-graph-area">
+                    <div class="bar-graph"><div class="bar w-80" title="80% - Frequência Alta"></div></div>
+                    <div class="bar-percentage">80%</div>
+                </div>
+            </div>
+
+            <div class="bar-item">
+                <div class="bar-label">4. <b>Reajustes e Cobranças</b> Não Transparentes</div>
+                <div class="bar-graph-area">
+                    <div class="bar-graph"><div class="bar w-80" title="80% - Frequência Alta"></div></div>
+                    <div class="bar-percentage">80%</div>
+                </div>
+            </div>
+
+            <div class="bar-item">
+                <div class="bar-label">5. <b>Dificuldade de Integração/Uso</b></div>
+                <div class="bar-graph-area">
+                    <div class="bar-graph"><div class="bar w-65" title="65% - Frequência Média"></div></div>
+                    <div class="bar-percentage">65%</div>
+                </div>
+            </div>
+            
+        </div>
+        <p style="text-align: center; font-size: 0.8em; margin-top: 15px; color: #6b7280;">*Os percentuais indicam a criticidade e frequência estimada das queixas no mercado B2B.</p>
+    </div>
+
+    ---
+
+    <h2>Oportunidades de Diferenciação para o <b>oMenu</b></h2>
+    <p>As queixas dos concorrentes indicam que a estratégia do <b>oMenu</b> deve focar não apenas no diferencial de <b>Acessibilidade</b>, mas também na excelência operacional para reter clientes B2B. A maior oportunidade reside na junção de um produto inovador com um serviço de alta qualidade.</p>
+
+    <table class="opportunity-table">
+        <thead>
+            <tr>
+                <th>Queixa Crítica do Concorrente</th>
+                <th>Estratégia do <b>oMenu</b> (Vantagem Competitiva)</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><b>Suporte Lento ou Ineficaz</b></td>
+                <td>Garantir <b>Sucesso do Cliente (Customer Success)</b> proativo e dedicado, com tempo de resposta ágil. <b>(Foco em Retenção/LTV)</b></td>
+            </tr>
+            <tr>
+                <td><span class="key-point"><b>Ausência de Acessibilidade Plena (100% de Oportunidade)</b></span></td>
+                <td><span class="key-point"><b>Posicionar-se como o ÚNICO cardápio 100% acessível e em conformidade com a LBI, transformando a inclusão em economia de custos e diferencial.</b></span></td>
+            </tr>
+            <tr>
+                <td><b>Falhas e Instabilidade no Sistema</b></td>
+                <td>Investir em <b>Robustez e Confiabilidade</b> da infraestrutura (Uptime), minimizando a perda de pedidos e receita do cliente.</td>
+            </tr>
+            <tr>
+                <td><b>Cobranças e Reajustes Não Transparentes</b></td>
+                <td>Adotar a estratégia <b>SaaS</b> com preços claros e justificados (Plano Essencial, Pro, Enterprise), focando no valor e não na taxa escondida.</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+</body>
+</html>
