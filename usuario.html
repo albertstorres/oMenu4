@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>oMenu - O Usuário</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <style>
+        /* Estilos base (Identidade Visual) */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body { 
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; 
+            background: linear-gradient(135deg, #f9fafb 0%, #f3f4f6 100%);
+            padding: 20px;
+            line-height: 1.6;
+            color: #374151;
+        }
+        
+        .container { 
+            max-width: 1200px; 
+            margin: 0 auto; 
+            background-color: #ffffff; 
+            padding: 40px; 
+            border-radius: 20px; 
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+            margin-bottom: 30px;
+        }
+        
+        h1 { 
+            text-align: center; 
+            color: #111827; 
+            margin-bottom: 16px; 
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #f97316, #ef4444);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .intro-text { 
+            text-align: center; 
+            font-size: 1.125rem; 
+            color: #6b7280; 
+            margin-bottom: 48px; 
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            font-style: italic;
+        }
+
+        /* Layout de Cards (2 colunas) */
+        .card-row {
+            display: flex;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        /* Estilo base do card principal com imagem */
+        .user-card {
+            flex: 1;
+            background-color: #ffffff;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .user-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.12);
+        }
+
+        .user-image {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            border-bottom: 4px solid #f97316; 
+        }
+
+        .user-content {
+            padding: 25px;
+        }
+        
+        .user-content h2 {
+            font-size: 1.5rem;
+            color: #111827;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .user-content p {
+            font-size: 1rem;
+            color: #6b7280;
+            line-height: 1.7;
+        }
+        
+        /* O conteúdo que deve ficar bold dentro das descrições */
+        .user-content p strong {
+            font-weight: 700;
+            color: #111827;
+        }
+
+        /* Estilo dos Cards de Funcionalidades */
+        .feature-card {
+            flex: 1;
+            padding: 25px;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+            background: linear-gradient(135deg, #fef3c7, #fde68a);
+            border: none;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(249, 115, 22, 0.1), rgba(239, 68, 68, 0.1));
+            z-index: 0;
+        }
+        
+        .feature-card > * {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 24px rgba(249, 115, 22, 0.15);
+        }
+
+        .feature-card h2 {
+            font-size: 1.4rem;
+            color: #92400e;
+            font-weight: 700;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(146, 64, 14, 0.2);
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: flex-start; /* NOVO: Alinha o ícone com o topo do texto, mesmo quando o texto quebra a linha */
+            margin-bottom: 20px;
+        }
+
+        .feature-icon {
+            font-size: 28px;
+            margin-right: 15px;
+            color: #f97316; /* Ícone padrão laranja */
+            /* Garante que o ícone não seja comprimido */
+            flex-shrink: 0;
+        }
+        
+        /* Cor de ícones para o card da direita (Consumidores em geral) */
+        .feature-card.right .feature-icon {
+            color: #ef4444; /* Ícone padrão vermelho */
+        }
+        
+        .feature-text {
+            line-height: 1.4;
+            /* Permite que o texto utilize todo o espaço restante */
+            flex-grow: 1; 
+        }
+        
+        /* CORREÇÃO: Força o strong a ser inline, e utiliza margin-right para separação, evitando quebras desnecessárias */
+        .feature-text strong {
+            font-size: 1rem;
+            color: #111827;
+            font-weight: 700;
+            display: inline; /* Garantindo que não force uma nova linha */
+            margin-right: 5px; /* Espaço após o título em bold */
+        }
+        
+        .feature-text span {
+            font-size: 0.95rem;
+            color: #6b7280;
+        }
+
+        /* Responsividade - mantendo cards lado a lado */
+        @media (max-width: 768px) {
+            .container {
+                padding: 24px;
+                margin: 10px;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .card-row {
+                flex-direction: row; /* Força manter lado a lado */
+                gap: 15px; /* Reduz o gap para economizar espaço */
+            }
+            
+            .user-card {
+                flex: 1; /* Mantém flex igual */
+                min-width: 0; /* Permite que o flex funcione corretamente */
+            }
+            
+            .user-image {
+                height: 180px; /* Reduz altura mas mantém proporção */
+            }
+            
+            .user-content {
+                padding: 15px; /* Reduz padding */
+            }
+            
+            .user-content h2 {
+                font-size: 1.2rem; /* Reduz tamanho do título */
+            }
+            
+            .user-content p {
+                font-size: 0.9rem; /* Reduz tamanho do texto */
+            }
+            
+            .feature-card {
+                padding: 15px; /* Reduz padding */
+            }
+            
+            .feature-card h2 {
+                font-size: 1.2rem; /* Reduz tamanho do título */
+            }
+            
+            .feature-icon {
+                font-size: 24px; /* Reduz tamanho do ícone */
+            }
+            
+            .feature-text strong {
+                font-size: 0.9rem; /* Reduz tamanho do texto bold */
+            }
+            
+            .feature-text span {
+                font-size: 0.85rem; /* Reduz tamanho do texto normal */
+            }
+        }
+        
+        /* Para telas muito pequenas, ajustes adicionais */
+        @media (max-width: 480px) {
+            .card-row {
+                gap: 10px; /* Gap ainda menor */
+            }
+            
+            .user-image {
+                height: 150px; /* Altura ainda menor */
+            }
+            
+            .user-content {
+                padding: 12px; /* Padding ainda menor */
+            }
+            
+            .feature-card {
+                padding: 12px; /* Padding ainda menor */
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>O USUÁRIO</h1>
+        <p class="intro-text">
+            Nosso público-alvo engloba todos os clientes de restaurantes, bares e lanchonetes, unindo <strong>acessibilidade</strong> e <strong>inovação</strong> em uma mesma solução.
+        </p>
+
+        <div class="card-row">
+            
+            <div class="user-card left-card">
+                <img src="https://raw.githubusercontent.com/albertstorres/imagem-embed/main/clara.jpeg" alt="Pessoa com deficiência visual usando um cardápio" class="user-image">
+                <div class="user-content">
+                    <h2>Pessoas com Deficiência Visual</h2>
+                    <p>
+                        Encontram no cardápio digital acessível recursos de voz, contraste adequado e compatibilidade com leitores de tela, garantindo <strong>autonomia</strong> e <strong>inclusão</strong> em suas experiências gastronômicas.
+                    </p>
+                </div>
+            </div>
+
+            <div class="user-card right-card">
+                <img src="https://raw.githubusercontent.com/albertstorres/imagem-embed/main/joao.jpeg" alt="Pessoa consultando um cardápio digital no celular" class="user-image">
+                <div class="user-content">
+                    <h2>Consumidores sem Deficiência Visual</h2>
+                    <p>
+                        Contam com um cardápio digital moderno, prático e responsivo, que torna o atendimento mais <strong>ágil</strong> e integrado aos hábitos digitais atuais.
+                    </p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card-row">
+            
+            <div class="feature-card left">
+                <h2>Pessoas com Deficiência Visual</h2>
+                
+                <div class="feature-item">
+                    <span class="material-icons feature-icon">mic</span>
+                    <div class="feature-text">
+                        <strong>Comandos em Voz:</strong> 
+                        <span>Navegação e leitura dos pratos em áudio.</span>
+                    </div>
+                </div>
+                
+                <div class="feature-item">
+                    <span class="material-icons feature-icon">contrast</span>
+                    <div class="feature-text">
+                        <strong>Alto Contraste:</strong>
+                        <span>Cores e fontes ajustadas para melhor legibilidade.</span>
+                    </div>
+                </div>
+                
+                <div class="feature-item">
+                    <span class="material-icons feature-icon">smartphone</span>
+                    <div class="feature-text">
+                        <strong>Compatibilidade Total:</strong>
+                        <span>Integração com os principais leitores de tela.</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="feature-card right">
+                <h2>Consumidores em Geral</h2>
+                
+                <div class="feature-item">
+                    <span class="material-icons feature-icon">flash_on</span>
+                    <div class="feature-text">
+                        <strong>Rápido e Responsivo:</strong>
+                        <span>Funciona perfeitamente em qualquer celular.</span>
+                    </div>
+                </div>
+                
+                <div class="feature-item">
+                    <span class="material-icons feature-icon">web</span>
+                    <div class="feature-text">
+                        <strong>Moderno e Intuitivo:</strong>
+                        <span>Design limpo que facilita a escolha.</span>
+                    </div>
+                </div>
+                
+                <div class="feature-item">
+                    <span class="material-icons feature-icon">link</span>
+                    <div class="feature-text">
+                        <strong>Integrado:</strong>
+                        <span>Alinhado aos hábitos digitais para um atendimento mais eficiente.</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</body>
+</html>

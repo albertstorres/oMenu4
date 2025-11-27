@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>oMenu - Equipe</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body { 
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; 
+            background: linear-gradient(135deg, #f9fafb 0%, #f3f4f6 100%);
+            padding: 20px;
+            line-height: 1.6;
+            color: #374151;
+        }
+        
+        .container { 
+            max-width: 1200px; 
+            margin: 0 auto; 
+            background-color: #ffffff; 
+            padding: 40px; 
+            border-radius: 20px; 
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+        }
+        
+        h1 { 
+            text-align: center; 
+            color: #111827; 
+            margin-bottom: 16px; 
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #f97316, #ef4444);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .intro-text { 
+            text-align: center; 
+            font-size: 1.125rem; 
+            color: #6b7280; 
+            margin-bottom: 48px; 
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            font-style: italic;
+        }
+
+        h2 {
+            text-align: center;
+            color: #374151;
+            font-size: 1.875rem;
+            font-weight: 600;
+            margin-bottom: 24px;
+            line-height: 1.3;
+        }
+
+        /* Estilos específicos para a página da equipe */
+        
+        .team-grid {
+            display: grid;
+            /* Layout: 3 colunas em telas maiores */
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            padding: 20px 0;
+        }
+
+        .team-card {
+            background-color: #ffffff;
+            padding: 25px;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+            text-align: center;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .team-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.12);
+        }
+
+        .member-photo {
+            width: 120px;
+            height: 120px;
+            border-radius: 20px;
+            object-fit: cover;
+            margin-bottom: 15px;
+            border: 4px solid #f97316;
+            transition: all 0.3s ease;
+        }
+
+        .team-card:hover .member-photo {
+            border-color: #ef4444;
+            transform: scale(1.05);
+        }
+
+        .member-name {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #111827;
+            text-transform: uppercase;
+            margin-bottom: 5px;
+        }
+
+        .member-role {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: #f97316;
+            margin-bottom: 10px;
+        }
+
+        .member-email {
+            font-size: 0.85rem;
+            color: #6b7280;
+            word-break: break-all;
+        }
+
+        .team-photo-container {
+            margin-top: 60px;
+            text-align: center;
+            background: linear-gradient(135deg, #fef3c7, #fde68a);
+            border: none;
+            padding: 40px;
+            border-radius: 20px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .team-photo-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(249, 115, 22, 0.1), rgba(239, 68, 68, 0.1));
+            z-index: 0;
+        }
+        
+        .team-photo-container > * {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .team-photo-container:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 24px rgba(249, 115, 22, 0.15);
+        }
+
+        .team-photo-container h2 {
+            color: #92400e;
+            font-weight: 700;
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+        }
+
+        .team-photo {
+            max-width: 100%;
+            height: auto;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .team-photo:hover {
+            transform: scale(1.02);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Responsividade básica */
+        @media (max-width: 900px) {
+            .team-grid {
+                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            }
+        }
+        @media (max-width: 600px) {
+            .team-grid {
+                grid-template-columns: 1fr; /* Uma coluna em telas muito pequenas */
+            }
+            .container {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Conheça a Equipe oMenu</h1>
+        <p class="intro-text">Uma equipe multidisciplinar dedicada à <strong>inclusão e acessibilidade</strong> no universo gastronômico.</p>
+
+        <div class="team-grid">
+            <div class="team-card">
+                <img src="https://raw.githubusercontent.com/albertstorres/imagem-embed/main/albert.jpeg" alt="Foto de Albert Sevy" class="member-photo">
+                <div class="member-name">Albert Sevy</div>
+                <div class="member-role">Dev. Backend</div>
+                <div class="member-email">asbt@cesar.school</div>
+            </div>
+
+            <div class="team-card">
+                <img src="https://raw.githubusercontent.com/albertstorres/imagem-embed/main/andre.jpeg" alt="Foto de André Pessoa" class="member-photo">
+                <div class="member-name">André Pessoa</div>
+                <div class="member-role">Gerente de Projetos</div>
+                <div class="member-email">alps@cesar.school</div>
+            </div>
+
+            <div class="team-card">
+                <img src="https://raw.githubusercontent.com/albertstorres/imagem-embed/main/bell.jpeg" alt="Foto de Bell Sérvio" class="member-photo">
+                <div class="member-name">Bell Sérvio</div>
+                <div class="member-role">Designer Interface</div>
+                <div class="member-email">bscq2@cesar.school</div>
+            </div>
+
+            <div class="team-card">
+                <img src="https://raw.githubusercontent.com/albertstorres/imagem-embed/main/lorena.jpeg" alt="Foto de Lorena Torres" class="member-photo">
+                <div class="member-name">Lorena Torres</div>
+                <div class="member-role">Designer Estratégica</div>
+                <div class="member-email">lts@cesar.school</div>
+            </div>
+
+            <div class="team-card">
+                <img src="https://raw.githubusercontent.com/albertstorres/imagem-embed/main/luan.jpeg" alt="Foto de Luan Menezes" class="member-photo">
+                <div class="member-name">Luan Menezes</div>
+                <div class="member-role">Dev Front-end</div>
+                <div class="member-email">lhsm2@cesar.school</div>
+            </div>
+
+            <div class="team-card">
+                <img src="https://raw.githubusercontent.com/albertstorres/imagem-embed/main/taina.jpeg" alt="Foto de Tainá Sampaio" class="member-photo">
+                <div class="member-name">Tainá Sampaio</div>
+                <div class="member-role">Designer de Produto</div>
+                <div class="member-email">tcs@cesar.school</div>
+            </div>
+
+            <div class="team-card">
+                <img src="https://raw.githubusercontent.com/albertstorres/imagem-embed/main/victor.jpeg" alt="Foto de Victor Colleto" class="member-photo">
+                <div class="member-name">Victor Colleto</div>
+                <div class="member-role">Analista de Projetos</div>
+                <div class="member-email">vca@cesar.school</div>
+            </div>
+        </div>
+
+        <div class="team-photo-container">
+            <h2>Nossa Equipe Reunida</h2>
+            <img src="https://raw.githubusercontent.com/albertstorres/imagem-embed/main/equipe.jpeg" alt="Foto da Equipe oMenu reunida" class="team-photo">
+        </div>
+    </div>
+</body>
+</html>

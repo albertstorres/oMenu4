@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Business Model Canvas (BMC) - oMenu</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body { 
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; 
+            background: linear-gradient(135deg, #f9fafb 0%, #f3f4f6 100%);
+            padding: 8px;
+            line-height: 1.3;
+            color: #1f2937;
+            font-size: 13px;
+        }
+
+        .container { 
+            max-width: 1400px; 
+            margin: 0 auto; 
+            background-color: #ffffff; 
+            padding: 16px; 
+            border-radius: 12px; 
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+        }
+
+        h1 { 
+            text-align: center; 
+            color: #111827; 
+            margin-bottom: 8px; 
+            font-size: 2rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #f97316, #ef4444);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .intro-text { 
+            text-align: center; 
+            font-size: 1rem; 
+            color: #4b5563; 
+            margin-bottom: 16px; 
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            font-style: italic;
+        }
+
+        /* Estrutura do BMC (9 Blocos) */
+        .bmc-grid {
+            display: grid;
+            grid-template-columns: 2fr 3fr 2fr 2fr 2fr; /* Layout padrão do BMC */
+            grid-template-rows: auto auto auto;
+            gap: 8px;
+            margin-top: 8px;
+        }
+
+        /* Estilo das Caixas do BMC */
+        .bmc-box {
+            background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 8px;
+            min-height: 90px;
+            display: flex;
+            flex-direction: column;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+        }
+
+        .bmc-box:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+            border-color: #cbd5e1;
+        }
+
+        .bmc-box h3 {
+            color: #111827;
+            margin-top: 0;
+            font-size: 0.85rem;
+            font-weight: 700;
+            border-bottom: 1px solid #e2e8f0;
+            padding-bottom: 4px;
+            margin-bottom: 6px;
+        }
+        
+        /* Definição das posições dos blocos para o layout 9 células */
+        .block-parcerias { grid-area: 2 / 1 / 3 / 2; }
+        .block-atividades { grid-area: 2 / 2 / 3 / 3; }
+        .block-recursos { grid-area: 2 / 3 / 3 / 4; }
+        .block-relacionamento { grid-area: 2 / 4 / 3 / 5; }
+        .block-canais { grid-area: 2 / 5 / 3 / 6; }
+        .block-custos { grid-area: 3 / 1 / 4 / 3; }
+        .block-receita { grid-area: 3 / 4 / 4 / 6; }
+        .block-valor { grid-area: 1 / 3 / 2 / 4; } /* Proposta de Valor no centro superior */
+        .block-clientes { grid-area: 1 / 5 / 2 / 6; } /* Segmentos de Clientes no lado direito */
+
+        .bmc-box ul {
+            list-style: none;
+            padding-left: 0;
+            margin: 0;
+            font-size: 0.75rem;
+            color: #374151;
+        }
+
+        .bmc-box ul li {
+            margin-bottom: 3px;
+            line-height: 1.3;
+            position: relative;
+            padding-left: 12px;
+        }
+
+        .bmc-box ul li::before {
+            content: "•";
+            color: #3b82f6;
+            font-weight: bold;
+            position: absolute;
+            left: 0;
+        }
+        
+        /* Estilo especial para Proposta de Valor e Receita/Custos */
+        .block-valor { 
+            background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%); 
+            border-color: #34d399; 
+        }
+        .block-valor h3 { 
+            color: #047857; 
+            border-bottom: 1px solid #059669; 
+        }
+        
+        .block-receita { 
+            background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%); 
+            border-color: #fbbf24; 
+        }
+        .block-receita h3 { 
+            color: #b45309; 
+            border-bottom: 1px solid #d97706; 
+        }
+        
+        .block-custos { 
+            background: linear-gradient(135deg, #fdf2f8 0%, #fce7f3 100%); 
+            border-color: #f9a8d4; 
+        }
+        .block-custos h3 { 
+            color: #a21caf; 
+            border-bottom: 1px solid #ec4899; 
+        }
+
+        /* Responsividade */
+        @media (max-width: 1024px) {
+            .bmc-grid {
+                grid-template-columns: 1fr 1fr;
+                grid-template-rows: repeat(6, auto);
+            }
+            
+            .block-clientes { grid-area: 1 / 1 / 2 / 2; }
+            .block-valor { grid-area: 1 / 2 / 2 / 3; }
+            .block-canais { grid-area: 2 / 1 / 3 / 2; }
+            .block-relacionamento { grid-area: 2 / 2 / 3 / 3; }
+            .block-receita { grid-area: 3 / 1 / 4 / 2; }
+            .block-recursos { grid-area: 3 / 2 / 4 / 3; }
+            .block-atividades { grid-area: 4 / 1 / 5 / 2; }
+            .block-parcerias { grid-area: 4 / 2 / 5 / 3; }
+            .block-custos { grid-area: 5 / 1 / 6 / 3; }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 12px;
+                margin: 4px;
+            }
+            
+            h1 {
+                font-size: 1.6rem;
+            }
+            
+            .bmc-grid {
+                grid-template-columns: 1fr;
+                grid-template-rows: repeat(9, auto);
+            }
+            
+            .block-clientes { grid-area: 1 / 1 / 2 / 2; }
+            .block-valor { grid-area: 2 / 1 / 3 / 2; }
+            .block-canais { grid-area: 3 / 1 / 4 / 2; }
+            .block-relacionamento { grid-area: 4 / 1 / 5 / 2; }
+            .block-receita { grid-area: 5 / 1 / 6 / 2; }
+            .block-recursos { grid-area: 6 / 1 / 7 / 2; }
+            .block-atividades { grid-area: 7 / 1 / 8 / 2; }
+            .block-parcerias { grid-area: 8 / 1 / 9 / 2; }
+            .block-custos { grid-area: 9 / 1 / 10 / 2; }
+            
+            .bmc-box {
+                min-height: 70px;
+                padding: 6px;
+            }
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Business Model Canvas (BMC) - oMenu</h1>
+        <p class="intro-text">Transformando a Proposta de Valor em um Modelo de Negócio Escalável e Inclusivo.</p>
+
+        <div class="bmc-grid">
+            <div class="bmc-box block-parcerias">
+                <h3>Parcerias Principais</h3>
+                <ul>
+                    <li><b>Tecnológicas:</b> Integração com Sistemas PDV/ERP.</li>
+                    <li><b>Estratégicas:</b> Associações de PCD Visual (Testes/Homologação).</li>
+                    <li><b>Canais:</b> <b>ABRASEL</b> (Endosso e Venda).</li>
+                </ul>
+            </div>
+
+            <div class="bmc-box block-atividades">
+                <h3>Atividades Principais</h3>
+                <ul>
+                    <li><b>P&D:</b> Desenvolvimento contínuo de Acessibilidade (LBI/WCAG).</li>
+                    <li><b>Vendas B2B:</b> Prospecção de Franquias e Redes.</li>
+                    <li><b>Operação:</b> Manutenção Cloud e Suporte Técnico.</li>
+                </ul>
+            </div>
+
+            <div class="bmc-box block-recursos">
+                <h3>Recursos Principais</h3>
+                <ul>
+                    <li><b>Intelectuais:</b> Plataforma SaaS e Algoritmos de Acessibilidade (Voz/Leitura).</li>
+                    <li><b>Humanos:</b> Especialistas em UX/Acessibilidade (WCAG).</li>
+                    <li><b>Tecnológicos:</b> Infraestrutura de Nuvem para Escala.</li>
+                </ul>
+            </div>
+
+            <div class="bmc-box block-valor">
+                <h3>Proposta de Valor</h3>
+                <ul>
+                    <li><b>Acessibilidade Universal:</b> Cardápio Digital 100% Acessível (Voz IA, Alto Contraste, LBI).</li>
+                    <li><b>Eficiência B2B:</b> Redução de Custos (Impressão) e Integração PDV.</li>
+                    <li><b>Diferencial:</b> Conformidade Legal e Reputação de Marca Inclusiva.</li>
+                </ul>
+            </div>
+
+            <div class="bmc-box block-relacionamento">
+                <h3>Relacionamento com Clientes</h3>
+                <ul>
+                    <li><b>B2B:</b> Suporte Especializado e Consultoria de Onboarding.</li>
+                    <li><b>B2C:</b> Autonomia total (Design sem atrito).</li>
+                </ul>
+            </div>
+
+            <div class="bmc-box block-clientes">
+                <h3>Segmentos de Clientes</h3>
+                <ul>
+                    <li><b>B2B (Pagador):</b> Restaurantes, Bares, Redes de Franquias.</li>
+                    <li><b>B2C (Usuário):</b> Pessoas com e sem Deficiência Visual (foco na Autonomia).</li>
+                </ul>
+            </div>
+
+            <div class="bmc-box block-canais">
+                <h3>Canais</h3>
+                <ul>
+                    <li><b>Venda:</b> Equipe Comercial Direta e Parcerias (ABRASEL).</li>
+                    <li><b>Distribuição:</b> Plataforma <b>SaaS</b> (100% Online).</li>
+                    <li><b>Comunicação:</b> Marketing Digital focado em Inclusão e ROI.</li>
+                </ul>
+            </div>
+
+            <div class="bmc-box block-custos">
+                <h3>Estrutura de Custos</h3>
+                <ul>
+                    <li><b>Custos Fixos:</b> Salários P&D e Vendas.</li>
+                    <li><b>Custos Variáveis:</b> Infraestrutura Cloud (Escalável) e CAC B2B.</li>
+                    <li><b>Manutenção:</b> Atualizações e licenças.</li>
+                </ul>
+            </div>
+
+            <div class="bmc-box block-receita">
+                <h3>Fontes de Receita</h3>
+                <ul>
+                    <li><b>Principal:</b> Assinatura Mensal (<b>SaaS</b>) - Planos Escaláveis.</li>
+                    <li><b>Adicional:</b> Serviços Premium e Análise de Dados (Monetização Futura).</li>
+                </ul>
+            </div>
+            
+        </div>
+
+    </div>
+</body>
+</html>

@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Brainstorming e Definição de Escopo - oMenu</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <style>
+        /* Estilos Baseados nos arquivos do projeto */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body { 
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; 
+            background: linear-gradient(135deg, #fef3c7 0%, #fed7aa 50%, #fecaca 100%);
+            padding: 20px;
+            line-height: 1.6;
+            color: #374151;
+            min-height: 100vh;
+        }
+        
+        .container { 
+            max-width: 1200px; 
+            margin: 0 auto; 
+            background-color: #ffffff; 
+            padding: 40px; 
+            border-radius: 20px; 
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+        }
+        
+        h1 { 
+            text-align: center; 
+            background: linear-gradient(135deg, #f97316 0%, #ef4444 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-size: 2.5em; 
+            margin-bottom: 5px;
+            font-weight: 800;
+        }
+        
+        h2 { 
+            color: #1f2937; 
+            font-size: 1.8em; 
+            margin-top: 30px; 
+            margin-bottom: 15px;
+            padding-bottom: 5px;
+            border-bottom: 2px solid #e5e7eb;
+            font-weight: 700;
+        }
+
+        h3 {
+            color: #4b5563;
+            font-size: 1.4em;
+            margin-top: 20px;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .req-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 30px;
+        }
+
+        .req-table th, .req-table td {
+            padding: 12px 15px;
+            text-align: left;
+            border: 1px solid #d1d5db; 
+            vertical-align: top;
+        }
+
+        .req-table th {
+            background-color: #f3f4f6; 
+            color: #1f2937;
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 0.9em;
+        }
+
+        .req-table tbody tr:nth-child(even) {
+            background-color: #f9fafb; 
+        }
+
+        .metadata-title {
+            text-align: center;
+            font-size: 1.2em;
+            color: #4b5563;
+            margin-top: -15px;
+            margin-bottom: 25px;
+            font-weight: 500;
+        }
+        
+        /* Golden Circle / Hipóteses Style (Similar ao ideacao.html) */
+        .flex-container {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .golden-circle-box {
+            flex: 1;
+            min-width: 250px;
+            padding: 20px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            background-color: #f9fafb;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+
+        .golden-circle-title {
+            font-size: 1.2em;
+            font-weight: 700;
+            color: #1f2937;
+            margin-bottom: 10px;
+            padding-bottom: 5px;
+            border-bottom: 2px solid #e5e7eb;
+        }
+
+        .golden-circle-item {
+            padding: 5px 0;
+            font-size: 0.95em;
+            color: #4b5563;
+        }
+        
+        .golden-circle-item b {
+            color: #f97316; 
+            font-weight: 700;
+        }
+        
+        .intro-text {
+            font-size: 1.1em;
+            color: #6b7280;
+            text-align: center;
+            margin-bottom: 30px;
+            line-height: 1.7;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Brainstorming e Definição de Escopo</h1>
+        <div class="metadata-title">Projeto: oMenu - Cardápio Digital Acessível | <b>Data: 15 de Setembro de 2025</b></div>
+        
+        <div class="intro-text">
+            <p>A sessão inicial focou em definir o "Por Quê" e o "O Quê" do projeto, alinhando a solução aos problemas identificados na fase de imersão. Este documento apresenta as ideias geradas durante o brainstorming e a definição do escopo inicial do sistema.</p>
+        </div>
+        
+        <hr style="border: 0; border-top: 1px solid #e5e7eb; margin: 30px 0;">
+
+        <h2>1. Objetivo Principal (Golden Circle)</h2>
+
+        <div class="flex-container">
+            <div class="golden-circle-box">
+                <div class="golden-circle-title">POR QUÊ? (Motivação Central)</div>
+                <div class="golden-circle-item">Superar a exclusão e a perda de <b>autonomia</b> de pessoas com deficiência visual em restaurantes, causada por cardápios inacessíveis.</div>
+                <div class="golden-circle-item">Cumprir a <b>Lei Brasileira de Inclusão (LBI)</b>.</div>
+            </div>
+
+            <div class="golden-circle-box">
+                <div class="golden-circle-title">O QUÊ? (A Solução)</div>
+                <div class="golden-circle-item">O <b>oMenu</b> – Uma plataforma de cardápio digital <b>100% acessível</b>.</div>
+                <div class="golden-circle-item">Escalável, de baixo custo e com foco no <b>Design Universal</b>.</div>
+            </div>
+
+            <div class="golden-circle-box">
+                <div class="golden-circle-title">Público-Alvo (B2B)</div>
+                <div class="golden-circle-item">Bares, Restaurantes, Franquias e Lanchonetes (Alta demanda por inovação e redução de custos).</div>
+            </div>
+        </div>
+        
+        <hr style="border: 0; border-top: 1px solid #e5e7eb; margin: 30px 0;">
+
+        <h2>2. Ideias de Funcionalidades (RFs)</h2>
+
+        <h3>2.1. Foco em Acessibilidade e Experiência do Cliente (Prioridade <b>CRÍTICA</b>)</h3>
+        <table class="req-table">
+            <thead>
+                <tr>
+                    <th style="width: 15%;">ID da Ideia</th>
+                    <th style="width: 55%;">Descrição da Funcionalidade</th>
+                    <th style="width: 30%;">Observações / Origem</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>B.RF.01</td>
+                    <td><b>Modo Acessibilidade (PCD)</b>: Interface dedicada, com ênfase em <b>Leitura por Voz Integrada</b> e compatibilidade com *screen readers* (<b>TalkBack/VoiceOver</b>).</td>
+                    <td>Requisito Crítico (Imersão)</td>
+                </tr>
+                <tr>
+                    <td>B.RF.02</td>
+                    <td><b>Ajustes Visuais</b>: Inclusão de <b>Modo Alto Contraste</b> e funcionalidade de <b>Aumento/Diminuição de Fonte</b> (suporte até 24px).</td>
+                    <td>Sugestão de Cliente (Feedback Azelio)</td>
+                </tr>
+                <tr>
+                    <td>B.RF.03</td>
+                    <td><b>Wayfinding e Orientação</b>: Funcionalidade para <b>ajudar o usuário a se orientar no salão</b> e identificar uma mesa livre.</td>
+                    <td>Sugestão de Cliente (Feedback Vania)</td>
+                </tr>
+                <tr>
+                    <td>B.RF.04</td>
+                    <td><b>Informação Completa</b>: Todos os itens devem ter <b>fotos realistas</b> e <b>descrição completa</b>, incluindo alérgenos.</td>
+                    <td>Requisito de Mercado (Pesquisa B2B)</td>
+                </tr>
+                <tr>
+                    <td>B.RF.05</td>
+                    <td><b>Ciclo de Pedido</b>: Opção para adicionar/remover itens, fechar a cesta de pedidos, selecionar <b>opção de pagamento</b> e <b>enviar o pedido</b> para a cozinha.</td>
+                    <td>Requisito Mínimo (MVP)</td>
+                </tr>
+                <tr>
+                    <td>B.RF.06</td>
+                    <td><b>Rastreio de Pedido</b>: Tela de acompanhamento em tempo real (<b>Status</b>: Enviado, Em Preparo, Pronto, Entregue).</td>
+                    <td>Sugestão de Cliente (Feedback Vania)</td>
+                </tr>
+                <tr>
+                    <td>B.RF.07</td>
+                    <td><b>Contato Fácil</b>: Botão/Função <b>"Chamar Garçom"</b> e acesso ao cardápio via <b>QR Code</b> ou <b>Link WhatsApp</b>.</td>
+                    <td>Usabilidade e Facilidade de Acesso</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3>2.2. Foco Operacional (Restaurante)</h3>
+        <table class="req-table">
+            <thead>
+                <tr>
+                    <th style="width: 15%;">ID da Ideia</th>
+                    <th style="width: 55%;">Descrição da Funcionalidade</th>
+                    <th style="width: 30%;">Observações / Origem</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>B.RF.08</td>
+                    <td><b>Mapa de Mesas / Painel Salão</b>: Painel de controle que exibe o <b>layout das mesas</b> e seu <b>status em tempo real</b>.</td>
+                    <td>Eficiência Operacional</td>
+                </tr>
+                <tr>
+                    <td>B.RF.09</td>
+                    <td><b>Telas de Preparo (KDS)</b>: Telas de *display* específicas para <b>Cozinha e Copa</b> para gerenciamento de fila de pedidos.</td>
+                    <td>Requisito Crítico (Fluxo de Pedido)</td>
+                </tr>
+                <tr>
+                    <td>B.RF.10</td>
+                    <td><b>Gestão de Cardápio</b>: Módulo Administrativo completo (<b>CRUD</b>) para gerenciar Categorias, Produtos, Preços, Descrições e Imagens.</td>
+                    <td>Gestão B2B (Módulo SaaS)</td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <hr style="border: 0; border-top: 1px solid #e5e7eb; margin: 30px 0;">
+
+        <h2>3. Ideias de Restrições Técnicas (RNFs)</h2>
+        <table class="req-table">
+            <thead>
+                <tr>
+                    <th style="width: 15%;">Categoria</th>
+                    <th style="width: 35%;">Requisito Principal</th>
+                    <th style="width: 50%;">Restrição Técnica / Arquitetura</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Desempenho</td>
+                    <td><b>Latência/Velocidade</b></td>
+                    <td>O tempo de envio de pedidos <b>não deve exceder 2 segundos</b>. Tempo de resposta do *frontend* <b>inferior a 1.5 segundos</b>.</td>
+                </tr>
+                <tr>
+                    <td>Confiabilidade</td>
+                    <td><b>Disponibilidade / Uptime</b></td>
+                    <td><b>Uptime mínimo de 99.8%</b>. Investir em <b>Robustez</b> para combater a instabilidade da concorrência.</td>
+                </tr>
+                <tr>
+                    <td>Stack</td>
+                    <td><b>Padrão de Desenvolvimento</b></td>
+                    <td>Backend: <b>Python/Django Rest Framework</b>. Frontend: <b>React</b>. BD: <b>PostgreSQL</b>. <b>Redis</b> para *caching*.</td>
+                </tr>
+                <tr>
+                    <td>Metodologia</td>
+                    <td><b>DevOps</b></td>
+                    <td>Adoção de <b>DevOps</b> (<b>CI/CD</b>) e <b>Testes Contínuos</b> para garantir qualidade e agilidade nas atualizações.</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <hr style="border: 0; border-top: 1px solid #e5e7eb; margin: 30px 0;">
+
+        <h2>4. Modelo de Negócio e Diferencial Competitivo</h2>
+        <table class="req-table">
+            <thead>
+                <tr>
+                    <th style="width: 25%;">Componente</th>
+                    <th style="width: 35%;">Detalhe</th>
+                    <th style="width: 40%;">Vantagem Competitiva</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><b>Proposta de Valor</b></td>
+                    <td>Autonomia, Inclusão, Conformidade Legal (LBI) e Economia de Custos (Impressão).</td>
+                    <td><b>Único cardápio 100% acessível no mercado</b> (Diferencial Crítico em relação à concorrência).</td>
+                </tr>
+                <tr>
+                    <td><b>Modelo de Receita</b></td>
+                    <td><b>Assinatura Mensal (SaaS)</b>.</td>
+                    <td>Preços claros e transparentes (Combater a falta de transparência dos concorrentes).</td>
+                </tr>
+                <tr>
+                    <td><b>Estratégia</b></td>
+                    <td>Foco em <b>Customer Success</b> e <b>Robustez</b> do sistema.</td>
+                    <td>Combater o <b>suporte ineficaz</b> e a <b>instabilidade</b> dos *players* tradicionais.</td>
+                </tr>
+            </tbody>
+        </table>
+
+    </div>
+</body>
+</html>

@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Evolução e Validação - CardápioDigital</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body { 
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; 
+            background: linear-gradient(135deg, #f9fafb 0%, #f3f4f6 100%);
+            padding: 20px;
+            line-height: 1.6;
+            color: #374151;
+        }
+        
+        .container { 
+            max-width: 1200px; 
+            margin: 0 auto; 
+            background-color: #ffffff; 
+            padding: 40px; 
+            border-radius: 20px; 
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+        }
+        
+        h1 { 
+            text-align: center; 
+            color: #111827; 
+            margin-bottom: 16px; 
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #f97316, #ef4444);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        h2 {
+            color: #374151;
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin: 48px 0 24px 0;
+            padding-bottom: 12px;
+            border-bottom: 2px solid #e5e7eb;
+        }
+
+        /* Estilo dos Nós */
+        .node { 
+            border-radius: 12px; 
+            padding: 16px 24px; 
+            margin: 8px; 
+            display: inline-block; 
+            text-align: center; 
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); 
+            font-size: 0.95rem; 
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+        
+        .node:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+        }
+        
+        .evolution-node { 
+            background: linear-gradient(135deg, #dbeafe, #bfdbfe); 
+            border-color: #3b82f6; 
+            color: #1e40af; 
+        }
+        
+        .pivot-node { 
+            background: linear-gradient(135deg, #dcfce7, #bbf7d0); 
+            border-color: #10b981; 
+            color: #065f46; 
+            font-weight: 600;
+        }
+        
+        .omenu-node { 
+            background: linear-gradient(135deg, #fef3c7, #fde68a); 
+            border-color: #f59e0b; 
+            color: #92400e; 
+            font-size: 1.125rem; 
+            padding: 20px 32px; 
+            border-radius: 50px; 
+            font-weight: 700;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .omenu-node::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+            transition: left 0.5s;
+        }
+        
+        .omenu-node:hover::before {
+            left: 100%;
+        }
+        
+        .validation-box { 
+            background: linear-gradient(135deg, #f0fdf4, #ecfdf5); 
+            border: 1px solid #bbf7d0; 
+            padding: 32px; 
+            margin: 24px 0; 
+            border-radius: 16px;
+            transition: all 0.3s ease;
+        }
+        
+        .validation-box:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 24px rgba(16, 185, 129, 0.15);
+        }
+        
+        .validation-title { 
+            font-size: 1.25rem; 
+            font-weight: 600; 
+            color: #065f46; 
+            margin-bottom: 16px; 
+            border-bottom: 2px solid #10b981; 
+            padding-bottom: 8px; 
+        }
+        
+        .validation-item { 
+            margin-top: 12px; 
+            font-weight: 400; 
+            font-size: 0.95rem; 
+            text-align: left;
+            color: #374151;
+            line-height: 1.6;
+        }
+        
+        /* Layout */
+        .flex-container { 
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(390px, 1fr));
+            gap: 24px;
+            margin-top: 40px; 
+        }
+        
+        .evolution-path { 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            margin-bottom: 48px;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        
+        .arrow { 
+            font-size: 1.5rem; 
+            color: #6b7280; 
+            margin: 0 8px;
+            font-weight: 300;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 24px;
+                margin: 10px;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .evolution-path {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .arrow {
+                transform: rotate(90deg);
+                margin: 8px 0;
+            }
+            
+            .flex-container {
+                grid-template-columns: 1fr;
+                gap: 16px;
+            }
+            
+            .validation-box {
+                padding: 24px;
+            }
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Evolução e Validação: oMenu – Cardápio Digital Inclusivo</h1>
+
+        <h2>Parte I: Linha Evolutiva da Ideação (O Caminho)</h2>
+        <div class="evolution-path">
+            <div class="node evolution-node">1. Geração de Ideias</div>
+            <span class="arrow">→</span>
+            <div class="node evolution-node">2. Sistema Integrado (1ª Ideia)</div>
+            <span class="arrow">→</span>
+            <div class="node evolution-node">3. Foco em Acessibilidade</div>
+            <span class="arrow">→</span>
+            <div class="node pivot-node">4. Virada de Chave: Equilíbrio e Inclusão</div>
+            <span class="arrow">→</span>
+            <div class="node omenu-node">PROPOSTA FINAL: oMenu</div>
+        </div>
+
+        <h2>Parte II: Validação e Estrutura (O Resultado)</h2>
+        <div class="flex-container">
+            <div class="validation-box">
+                <div class="validation-title">1. Hipóteses</div>
+                <div class="validation-item"><strong>POR QUE?</strong>: Exclusão da pessoa com deficiência visual.</div>
+                <div class="validation-item"><strong>COMO?</strong>: Solução Digital com Design Universal.</div>
+                <div class="validation-item"><strong>O QUÊ?</strong>: O oMenu.</div>
+            </div>
+
+            <div class="validation-box">
+                <div class="validation-title">2. Canvas da Proposta de Valor</div>
+                <div class="validation-item"><strong>Analgésicos</strong>: Elimina Custo de Impressão e Garante LBI.</div>
+                <div class="validation-item"><strong>Criadores de Ganhos</strong>: Diferencial Competitivo e Autonomia para o cliente.</div>
+            </div>
+
+            <div class="validation-box">
+                <div class="validation-title">3. Modelo de Negócio (BMC)</div>
+                <div class="validation-item"><strong>Segmento</strong>: Bares, Restaurantes e Franquias.</div>
+                <div class="validation-item"><strong>Receita</strong>: Assinatura Mensal (SaaS).</div>
+                <div class="validation-item" style="font-style: italic; color: #8B4513; margin-top: 10px;">(Conexão: O Valor (2) gera a Receita (3)).</div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

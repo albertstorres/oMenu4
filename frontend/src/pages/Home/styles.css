@@ -73,6 +73,17 @@
   background: linear-gradient(to right, #ea580c, #dc2626);
 }
 
+.accessibility-button {
+  background-color: #111827 !important;
+  color: #f5f5f5 !important;
+  border: 1px solid #111827 !important;
+}
+
+.accessibility-button:hover {
+  background-color: #030712 !important;
+  color: #fef3c7 !important;
+}
+
 .button-icon {
   margin-left: 0.5rem;
   height: 1rem;

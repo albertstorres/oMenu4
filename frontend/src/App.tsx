@@ -10,6 +10,7 @@ import CartSidebar from "./components/CartSidebar";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import ProductList from "./pages/ProductList";
+import ProductListAccessibility from "./pages/ProductListAccessibility";
 
 const App: React.FC = () => {
   return (
@@ -25,6 +26,7 @@ const App: React.FC = () => {
                     <Route path="/" element={<Home />} />
                     <Route path="/login" element={<Login />} />
                     <Route path="/produtos" element={<ProductList />} />
+                    <Route path="/acessibilidade" element={<ProductListAccessibility />} />
                   </Routes>
                 </main>
                 <CartSidebar />

@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>oMenu - Documentação</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <style>
+        /* Estilos base (Identidade Visual) */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body { 
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; 
+            background: linear-gradient(135deg, #f9fafb 0%, #f3f4f6 100%);
+            padding: 20px;
+            line-height: 1.6;
+            color: #374151;
+        }
+        
+        .container { 
+            max-width: 1200px; 
+            margin: 0 auto; 
+            background-color: #ffffff; 
+            padding: 40px; 
+            border-radius: 20px; 
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+            margin-bottom: 30px;
+        }
+        
+        h1 { 
+            text-align: center; 
+            color: #111827; 
+            margin-bottom: 16px; 
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #f97316, #ef4444);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .intro-text { 
+            text-align: center; 
+            font-size: 1.125rem; 
+            color: #6b7280; 
+            margin-bottom: 48px; 
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            font-style: italic;
+        }
+        
+        /* Layout de Conteúdo Principal (2 Colunas) */
+        .document-row {
+            display: flex;
+            gap: 40px;
+            align-items: flex-start;
+            margin-bottom: 40px; /* Adicionado margem para separar os dois cards grandes */
+        }
+        
+        /* Coluna da Imagem (Card Grande) - LADO ESQUERDO */
+        .image-col {
+            flex: 1.5; /* Redução de 10% aplicada no primeiro passo */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .card-image-wrapper {
+            width: 100%;
+            padding: 30px;
+            background-color: #fcfcfc;
+            border-radius: 20px;
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15); 
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .document-image {
+            width: 90%;
+            height: auto;
+            border-radius: 10px;
+            object-fit: contain;
+            max-height: 400px; 
+        }
+
+        /* Coluna de Conteúdo (Links e Botões) - LADO DIREITO */
+        .content-col {
+            flex: 1; 
+            padding: 20px 0;
+        }
+
+        .section-title {
+            color: #111827;
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            padding-bottom: 5px;
+            border-bottom: 2px solid #e5e7eb;
+        }
+
+        /* Estilo dos Botões */
+        .button-group {
+            display: flex;
+            flex-wrap: wrap; 
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        /* AJUSTE PARA FORÇAR OS 3 BOTÕES DE ENTREGÁVEIS NA MESMA LINHA */
+        .entregaveis-group {
+            flex-wrap: nowrap; /* Impede a quebra de linha em telas grandes */
+        }
+        .entregaveis-group .doc-button {
+            width: 32%; /* Largura calculada para caber 3 com o gap de 15px */
+            min-width: 0; 
+        }
+
+        .doc-button {
+            display: inline-flex;
+            align-items: center;
+            padding: 12px 24px;
+            font-size: 1rem;
+            font-weight: 600;
+            text-decoration: none;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            justify-content: center;
+            border: none;
+        }
+        
+        /* Botões Primários (Gradiente Laranja-Vermelho) */
+        .doc-button.primary {
+            background: linear-gradient(135deg, #f97316, #ef4444);
+            color: #ffffff;
+        }
+
+        .doc-button.primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(249, 115, 22, 0.4);
+            color: #ffffff;
+        }
+
+        /* Botões Secundários (Gradiente Verde) */
+        .doc-button.secondary {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: #ffffff;
+        }
+        
+        .doc-button.secondary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(16, 185, 129, 0.4);
+            color: #ffffff;
+        }
+        
+        /* Responsividade */
+        @media (max-width: 768px) {
+            .container {
+                padding: 24px;
+                margin: 10px;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .document-row {
+                flex-direction: column;
+            }
+            .content-col, .image-col {
+                flex: 1 !important;
+                width: 100%;
+                padding: 10px 0;
+            }
+            .document-image {
+                max-width: 100%;
+                max-height: none;
+            }
+            .button-group {
+                justify-content: center;
+                flex-wrap: wrap; 
+            }
+            /* Em telas pequenas, os botões dos entregáveis voltam a ser 100% de largura */
+            .entregaveis-group .doc-button {
+                 width: 100%; 
+                 max-width: 300px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Documentação do Projeto oMenu</h1>
+        <p class="intro-text">Acesse todos os documentos, cronogramas e entregáveis do projeto em um só lugar.</p>
+
+        <div class="document-row">
+            
+            <div class="image-col">
+                <div class="card-image-wrapper">
+                    <img src="https://raw.githubusercontent.com/albertstorres/imagem-embed/main/google_drive.jpeg" alt="Ilustração do Google Drive" class="document-image">
+                </div>
+            </div>
+            
+            <div class="content-col">
+                
+                <h2 class="section-title">Link do Drive e Cronograma</h2>
+                <div class="button-group">
+                    <a href="https://drive.google.com/drive/u/1/folders/15zGrD6pFJc1XBQeoWp33hlMW-TETKdBN" class="doc-button primary" target="_blank">
+                        <span class="material-icons" style="font-size: 20px; margin-right: 8px;">folder</span>
+                        Drive
+                    </a>
+                    <a href="https://docs.google.com/spreadsheets/d/1S2aOAlojppwwRowdebocwVMZce-UbhG_C7AO3chyIi8/edit?usp=drive_link" class="doc-button primary" target="_blank">
+                        <span class="material-icons" style="font-size: 20px; margin-right: 8px;">calendar_month</span>
+                        Cronograma
+                    </a>
+                </div>
+                
+                <h2 class="section-title">Entregáveis</h2>
+                <div class="button-group entregaveis-group">
+                    <a href="https://drive.google.com/drive/u/1/folders/1GEPYr6UsVr4apzHiFwnIs3Xgq3oVTLxN" class="doc-button secondary" target="_blank">
+                        <span class="material-icons" style="font-size: 20px; margin-right: 8px;">flag</span>
+                        KICKOFF
+                    </a>
+                    <a href="https://drive.google.com/drive/u/1/folders/1S6aAitNq4A1G4g04eZ5TVF6t2LCHAi0O" class="doc-button secondary" target="_blank">
+                         <span class="material-icons" style="font-size: 20px; margin-right: 8px;">looks_one</span>
+                        SR1
+                    </a>
+                    <a href="https://drive.google.com/drive/folders/1yRme2C0u2dUUz-uR-76wh5gRi33zkTi1?usp=drive_link" class="doc-button secondary" target="_blank">
+                        <span class="material-icons" style="font-size: 20px; margin-right: 8px;">looks_two</span>
+                        SR2
+                    </a>
+                </div>
+            </div>
+            
+        </div>
+        
+        <div class="document-row">
+            
+            <div class="image-col">
+                <div class="card-image-wrapper">
+                    <img src="https://raw.githubusercontent.com/albertstorres/imagem-embed/main/github_logo.png" alt="Logo do GitHub" class="document-image">
+                </div>
+            </div>
+            
+            <div class="content-col">
+                
+                <h2 class="section-title">Repositório do Código</h2>
+                <div class="button-group">
+                    <a href="https://github.com/albertstorres/oMenu4" class="doc-button primary" target="_blank">
+                        <span class="material-icons" style="font-size: 20px; margin-right: 8px;">code</span>
+                        GitHub (oMenu)
+                    </a>
+                </div>
+            </div>
+            
+        </div>
+        </div>
+</body>
+</html>

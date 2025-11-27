@@ -1,0 +1,94 @@
+<div class="footer-container">
+    <div class="footer-content">
+        <h3 class="footer-title">oMenu - Cardápio Digital Acessível</h3>
+        
+        <div class="footer-links">
+            <a href="https://drive.google.com/drive/u/1/folders/15zGrD6pFJc1XBQeoWp33hlMW-TETKdBN" target="_blank" class="footer-link">Drive do Projeto</a>
+            <span class="link-separator">|</span>
+            <a href="https://github.com/albertstorres/oMenu4" target="_blank" class="footer-link">Repositório GitHub</a>
+        </div>
+        
+        <p class="footer-copyright">
+            © 2025 oMenu. Todos os direitos reservados.
+        </p>
+    </div>
+</div>
+
+<style>
+    /* AJUSTE CRÍTICO: 
+       Remove margens/paddings do HTML e BODY internos ao iframe.
+    */
+    html, body {
+        margin: 0 !important;
+        padding: 0 !important;
+        overflow: hidden; /* Evita barras de rolagem desnecessárias */
+    }
+
+    /* Estilos do Rodapé */
+    .footer-container {
+        width: 100%;
+        padding: 20px 0; /* Padding interno para o conteúdo respirar */
+        /* Usa o gradiente de cor primária do projeto (Laranja/Vermelho) */
+        background: linear-gradient(90deg, #f97316, #ef4444); 
+        box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.1);
+        font-family: 'Inter', sans-serif;
+    }
+    
+    .footer-content {
+        max-width: 1000px;
+        margin: 0 auto;
+        text-align: center;
+        color: #ffffff; /* Texto branco para alto contraste */
+        padding: 0 20px;
+    }
+    
+    .footer-title {
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin-bottom: 10px;
+        text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+    }
+    
+    .footer-links {
+        margin-bottom: 15px;
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap; 
+        gap: 8px;
+    }
+    
+    .footer-link {
+        color: #ffffff;
+        text-decoration: none;
+        font-weight: 500;
+        font-size: 0.95rem;
+        transition: color 0.3s ease;
+    }
+    
+    .footer-link:hover {
+        color: #fca5a5; 
+        text-decoration: underline;
+    }
+
+    .link-separator {
+        color: #fef3c7; 
+        margin: 0 5px;
+        font-size: 0.95rem;
+    }
+    
+    .footer-copyright {
+        font-size: 0.8rem;
+        color: #fef3c7; 
+    }
+
+    /* Responsividade para telas muito pequenas */
+    @media (max-width: 500px) {
+        .footer-links {
+            flex-direction: column;
+            gap: 0;
+        }
+        .link-separator {
+            display: none; 
+        }
+    }
+</style>

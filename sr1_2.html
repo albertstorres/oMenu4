@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Status Report 1 - oMenu</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <style>
+        /* Padrão Visual do Projeto */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body { 
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; 
+            background: linear-gradient(135deg, #f9fafb 0%, #f3f4f6 100%);
+            padding: 40px 20px;
+            line-height: 1.6;
+            color: #374151;
+        }
+
+        /* Estrutura de Slides */
+        .slide-deck {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .slide {
+            background-color: #ffffff;
+            padding: 40px;
+            margin-bottom: 30px;
+            border-radius: 16px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+            min-height: 250px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        /* Tipografia */
+        h2 {
+            font-size: 1.8em;
+            color: #111827;
+            border-bottom: 3px solid #f3f4f6;
+            padding-bottom: 10px;
+            margin-bottom: 25px;
+            font-weight: 700;
+        }
+
+        h3 {
+            font-size: 1.4em;
+            color: #1f2937;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        /* Tabelas */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            font-size: 0.95em;
+        }
+
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        th {
+            background-color: #f9fafb;
+            color: #111827;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        td b {
+            color: #007bff; /* Cor para destacar o foco */
+            font-weight: 700;
+        }
+        
+        /* Listas */
+        ul {
+            list-style: disc inside;
+            padding-left: 20px;
+            font-size: 1.05em;
+            margin-top: 10px;
+        }
+
+        ul li {
+            margin-bottom: 8px;
+        }
+
+        /* Links (para links do projeto) */
+        .link-table td {
+            text-align: center;
+        }
+        
+        .link-table a {
+            color: #007bff;
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s;
+        }
+
+        .link-table a:hover {
+            color: #0056b3;
+            text-decoration: underline;
+        }
+        
+        /* Estilos para os Cards da Equipe e Personas */
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 25px;
+            margin-top: 5px;
+        }
+        
+        /* Estilos para os Cards de Personas (NOVO LAYOUT) */
+        .persona-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr; /* Duas colunas iguais */
+            gap: 30px;
+            margin-top: 15px;
+        }
+
+        .persona-card {
+            background-color: #fcfcfc;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+            transition: transform 0.2s;
+            display: flex;
+            flex-direction: column;
+            align-items: center; /* Centralizar conteúdo do card da persona */
+            text-align: center;
+        }
+        
+        .persona-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+        }
+
+        /* Estilo da Foto que será usado tanto na Equipe quanto nas Personas */
+        .member-photo, .persona-photo {
+            width: 120px; 
+            height: 120px; 
+            object-fit: cover;
+            margin: 0 auto 15px; /* Centralizar */
+            border-radius: 8px; 
+            border: 2px solid #3b82f6; 
+        }
+
+        .persona-details {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 15px;
+            width: 100%; /* Garantir que os detalhes ocupem a largura total do card para alinhamento */
+        }
+        
+        .persona-details h3 {
+            font-size: 1.3em;
+            color: #007bff;
+            margin-bottom: 5px;
+            font-weight: 700;
+            text-align: center; /* Centralizar nome */
+        }
+        
+        .persona-role {
+            font-size: 0.95em;
+            color: #4b5563;
+            text-align: center;
+        }
+
+        .needs-title {
+            font-size: 1.15em;
+            color: #1f2937;
+            margin-top: 10px;
+            margin-bottom: 8px;
+            padding-bottom: 5px;
+            border-bottom: 1px solid #e5e7eb;
+            font-weight: 600;
+            text-align: left; /* Alinhar título das necessidades à esquerda */
+            width: 100%;
+        }
+
+        .needs-list {
+            list-style: none;
+            padding-left: 0;
+            font-size: 0.95em;
+            text-align: left; /* Alinhar lista à esquerda */
+            width: 100%;
+        }
+        
+        .needs-list li {
+            margin-bottom: 8px;
+            padding-left: 0;
+            position: relative;
+        }
+        
+        .needs-list li::before {
+            content: '•'; 
+            color: #3b82f6; 
+            font-weight: bold; 
+            display: inline-block; 
+            width: 1em;
+            margin-left: -1em;
+        }
+        
+        .needs-list li b {
+            font-weight: 700;
+            color: #111827;
+        }
+        
+        .highlight-text {
+            color: #10b981;
+            font-weight: 700;
+        }
+        
+        /* Estilos do card da Equipe */
+        .member-card {
+            background-color: #fcfcfc;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .member-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+        }
+
+        .member-name {
+            font-size: 1.3em;
+            font-weight: 700;
+            color: #1f2937;
+            margin-bottom: 5px;
+        }
+
+        .member-role {
+            font-size: 0.95em;
+            color: #4b5563;
+            margin-bottom: 10px;
+            font-weight: 500;
+        }
+
+        .member-contact {
+            font-size: 0.85em;
+            color: #6b7280;
+            word-break: break-all;
+        }
+
+        .member-contact i {
+            color: #3b82f6;
+            margin-right: 5px;
+        }
+
+        .member-contact a {
+            color: #6b7280;
+            text-decoration: none;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="slide-deck">
+
+        <div class="slide">
+            <h2 style="text-align: center; border-bottom: none; font-size: 2.2em; margin-bottom: 10px; color: #007bff;">
+                <i class="fas fa-chart-line" style="margin-right: 15px;"></i> Status Report 1
+            </h2>
+            <h1 style="text-align: center; font-size: 3em; color: #111827; margin-top: 0;">oMenu: Cardápio Digital Acessível</h1>
+            <p style="text-align: center; font-size: 1.2em; color: #4b5563;">Revisão do Planejamento e Início da Execução (Ciclo SDLC)</p>
+        </div>
+
+        <div class="slide">
+            <h2><i class="fas fa-glasses" style="margin-right: 10px;"></i> Imersão: Definição do Desafio</h2>
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>Questão</th>
+                        <th>Resposta</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Qual o problema?</td>
+                        <td>A ausência de <b>autonomia</b> e a <b>exclusão</b> de pessoas com deficiência visual (PCD Visual) na experiência de consumo em restaurantes.</td>
+                    </tr>
+                    <tr>
+                        <td>Quais as causas?</td>
+                        <td><b>Falta de Acessibilidade Digital</b> (Cardápios não otimizados), <b>Logística Cara do Impresso</b> e <b>Incentivo Público Fraco</b> (Lacunas em políticas).</td>
+                    </tr>
+                    <tr>
+                    <td>Quais as consequências?</td>
+                        <td><b>Exclusão Social</b> (o que leva a PCD Visual a se sentir <b>cerceada e excluída de bares, restaurantes e lanchonetes</b>) e <b>Prejuízo ao Negócio</b> (risco legal e perda de clientes).</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="slide">
+            <h2><i class="fas fa-bullseye" style="margin-right: 10px;"></i> Objetivos e Status Atual</h2>
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>Questão</th>
+                        <th>Resposta</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Objetivo Principal</td>
+                        <td>Desenvolver o <b>oMenu</b>, plataforma <b>inovadora</b> com <b>Inteligência Artificial (IA)</b> para leitura por voz nativa, promovendo autonomia e posicionando o B2B na vanguarda da inclusão.</td>
+                    </tr>
+                    <tr>
+                        <td>% Alcançado</td>
+                        <td><b>~35%</b> (Conclusão das etapas de Planejamento e Início da Execução).</td>
+                    </tr>
+                    <tr>
+                        <td>Próximos Passos</td>
+                        <td><b>1.</b> Desenvolvimento do Protótipo de Alta Fidelidade (MVP). <b>2.</b> Testes de Usabilidade e Acessibilidade. <b>3.</b> Estruturação final e implementação do Plano de Monetização (SaaS).</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="slide">
+            <h2><i class="fas fa-user-friends" style="margin-right: 10px;"></i> Nossas Personas: Quem Atendemos</h2>
+            
+            <div class="persona-grid">
+                <div class="persona-card primary-user">
+                    <img src="https://raw.githubusercontent.com/albertstorres/imagem-embed/main/clara.jpeg" alt="Foto de Clara Almeida Costa" class="persona-photo">
+                    <div class="persona-details">
+                        <h3 class="persona-name"><i class="fas fa-blind" style="margin-right: 8px;"></i> CLARA ALMEIDA COSTA (68)</h3>
+                        <p class="persona-role">Aposentada | PCD Visual (Usuário Primário)</p>
+                    </div>
+                    
+                    <h4 class="needs-title">Objetivo Principal: <span class="highlight-text">Autonomia e Dignidade</span></h4>
+                    <ul class="needs-list">
+                        <li>Acesso facilitado a cardápios que ofereçam recursos de <b>voz</b> e <b>alto contraste</b>.</li>
+                        <li>Experiência verdadeiramente inclusiva, sem depender de terceiros para escolher o prato.</li>
+                        <li>Valoriza o <b>contato humano</b> e a <b>gentileza</b>.</li>
+                    </ul>
+                </div>
+
+                <div class="persona-card secondary-user">
+                    <img src="https://raw.githubusercontent.com/albertstorres/imagem-embed/main/joao.jpeg" alt="Foto de João Henrique da Silva" class="persona-photo">
+                    <div class="persona-details">
+                        <h3 class="persona-name"><i class="fas fa-mobile-alt" style="margin-right: 8px;"></i> JOÃO HENRIQUE DA SILVA (29)</h3>
+                        <p class="persona-role">Analista de Marketing Digital (Usuário Secundário)</p>
+                    </div>
+
+                    <h4 class="needs-title">Objetivo Principal: <span class="highlight-text">Praticidade e Eficiência</span></h4>
+                    <ul class="needs-list">
+                        <li>Acesso <b>rápido e prático</b> a cardápios digitais.</li>
+                        <li>Busca soluções que unam <b>eficiência e inovação</b> para simplificar sua experiência.</li>
+                        <li>Facilidade em reservas, pedidos e pagamentos online.</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <p style="font-size: 1em; color: #1f2937; margin-top: 25px; text-align: center; font-weight: 500;">
+                O <b>oMenu</b> é uma solução com <b>Design Universal</b>, projetada para resolver a necessidade de <b>Autonomia</b> (Clara) e de <b>Praticidade/Inovação</b> (João) simultaneamente.
+            </p>
+
+        </div>
+        <div class="slide">
+            <h2><i class="fas fa-search" style="margin-right: 10px;"></i> Análise de Concorrência e Gaps</h2>
+            
+            <p style="margin-bottom: 20px;">A análise abaixo mapeia os principais concorrentes digitais e os Gaps de Acessibilidade que o <b>oMenu</b> está apto a resolver, oferecendo um diferencial de Inovação e Inclusão no mercado.</p>
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>Solução Concorrente</th>
+                        <th>Foco Principal</th>
+                        <th>Gap Crítico (Oportunidade para oMenu)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><b>OlaClick / BeeFood / Goomer / Abrahão</b></td>
+                        <td>Digitalização do cardápio; Pedido/Pagamento; Eficiência operacional B2B.</td>
+                        <td><b>Ausência de Acessibilidade Plena:</b> Falhas em <b>Voz Nativa</b> e <b>Alto Contraste</b>, não garantindo autonomia ao PCD Visual.</td>
+                    </tr>
+                    <tr>
+                        <td>Cardápios em Braile</td>
+                        <td>Cumprimento legal e atendimento a PCD Visual (método físico).</td>
+                        <td><b>Ineficácia e Alto Custo:</b> Atende apenas a uma <b>baixa porcentagem</b> da população PCD Visual.</td>
+                    </tr>
+                    <tr>
+                        <td><b>Oportunidade do oMenu</b></td>
+                        <td>N/A (O diferencial do oMenu)</td>
+                        <td>Nenhum concorrente utiliza a <b>IA como recurso nativo de voz</b> para a leitura do cardápio, garantindo <b>Autonomia</b> (Diferencial competitivo).</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="slide">
+            <h2><i class="fas fa-lightbulb" style="margin-right: 10px;"></i> Ideação: O Caminho até o oMenu</h2>
+            
+            <p>A geração de ideias foi realizada por meio de <b>Brainstorming</b>, explorando um espectro desde a solução padrão de mercado até a proposta <b>inclusiva</b> final.</p>
+            
+            <h3>Motivadores para a Escolha do oMenu:</h3>
+            <ul>
+                <li><b>Fator Social:</b> Resolver o problema central da <b>falta de autonomia</b> do usuário foco.</li>
+                <li><b>Vantagem Competitiva:</b> Ausência de concorrentes com foco em <b>acessibilidade nativa via IA</b>.</li>
+                <li><b>Fator Legal/Ético:</b> Garantir o <b>direito legal e ético</b> de acesso à informação e igualdade de experiência, usando a tecnologia para transpor barreiras.</li>
+            </ul>
+        </div>
+
+        <div class="slide">
+            <h2><i class="fas fa-cogs" style="margin-right: 10px;"></i> Metodologia: SDLC e DevOps</h2>
+            
+            <p>O projeto adota o <b>SDLC</b> (<b>Software Development Life Cycle</b> ou <b>Ciclo de Vida de Desenvolvimento de Software</b>) como estrutura de <b>Ciclo de Vida</b> (o "O quê") e o <b>DevOps</b> como a <b>Metodologia de Desenvolvimento</b> (o "Como"), com foco em entregas contínuas e testes rigorosos.</p>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Estrutura/Metodologia</th>
+                        <th>Foco e Justificativa</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><b>SDLC (Ciclo de Vida)</b></td>
+                        <td>Define as <b>fases macro</b> (Planejamento, Análise, Design, etc.) para garantir a cobertura completa do ciclo de vida do software.</td>
+                    </tr>
+                    <tr>
+                        <td><b>DevOps (Metodologia)</b></td>
+                        <td>Garante <b>fases menores e maior número de testes</b> (<b>CI/CD</b>), essencial para a alta qualidade e estabilidade de um produto acessível (Automação de Testes de Usabilidade e IA).</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>Fases do SDLC Concluídas (Status Atual):</h3>
+            <ul>
+                <li><b>1. Planejamento:</b> Definição do Desafio, Pesquisa de Mercado e Modelo de Negócio (SaaS).</li>
+                <li><b>2. Análise de Requisitos:</b> Concorrência, Definição do MVP, Ideação e Proposta de Valor.</li>
+                <li><b>3. Design/Protótipo:</b> Construção da Estrutura de Baixa Fidelidade (HTML/Sites) e Design UX/UI Inicial (Em andamento).</li>
+            </ul>
+            
+            <table class="link-table">
+                <thead>
+                    <tr>
+                        <th>Documentação Geral</th>
+                        <th>Links da Equipe e Ideação</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><a href="https://drive.google.com/drive/u/1/folders/15zGrD6pFJc1XBQeoWp33hlMW-TETKdBN" target="_blank">Repositório Drive do Projeto</a></td>
+                        <td><a href="https://sites.google.com/d/1W-IUfV7etsnH_9l_aXcP_qT73WMP9Gjj/p/1DJuitRcf1iXX4LrzCBv3uIi8Ry-Tte_z/edit" target="_blank">Site da Equipe</a></td>
+                    </tr>
+                    <tr>
+                        <td><a href="https://drive.google.com/file/d/18iCOXSw5UZW1H1Oj1LPDX78f3N403pIp/view?usp=sharing" target="_blank">Levantamento de Requisitos (Análise)</a></td>
+                        <td><a href="https://drive.google.com/file/d/1-mw2Xul9B5vI5rTsaREwBaRMBRDZRUP_/view?usp=sharing" target="_blank">Registro de Brainstorming (Ideação)</a></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2"><a href="https://drive.google.com/file/d/1r8YR7hVGVvs10jcu5jsVShJ2opGJSP7h/view?usp=sharing" target="_blank">Business Model Canvas (Modelagem de Negócios)</a></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="slide">
+            <h2><i class="fas fa-users" style="margin-right: 10px;"></i> Equipe e Responsabilidades</h2>
+            
+            <div class="team-grid">
+                
+                <div class="member-card">
+                    <img src="https://raw.githubusercontent.com/albertstorres/imagem-embed/main/albert.jpeg" alt="Foto de Albert Sevy" class="member-photo">
+                    <div class="member-name">ALBERT SEVY</div>
+                    <div class="member-role">Dev. Backend</div>
+                    <div class="member-contact">
+                        <i class="fas fa-envelope"></i>
+                        <a href="mailto:asbt@cesar.school">asbt@cesar.school</a>
+                    </div>
+                </div>
+
+                <div class="member-card">
+                    <img src="https://raw.githubusercontent.com/albertstorres/imagem-embed/main/andre.jpeg" alt="Foto de André Pessoa" class="member-photo">
+                    <div class="member-name">ANDRÉ PESSOA</div>
+                    <div class="member-role">Gerente de Projetos</div>
+                    <div class="member-contact">
+                        <i class="fas fa-envelope"></i>
+                        <a href="mailto:alps@cesar.school">alps@cesar.school</a>
+                    </div>
+                </div>
+
+                <div class="member-card">
+                    <img src="https://raw.githubusercontent.com/albertstorres/imagem-embed/main/bell.jpeg" alt="Foto de Bell Sérvio" class="member-photo">
+                    <div class="member-name">BELL SÉRVIO</div>
+                    <div class="member-role">Designer Interface</div>
+                    <div class="member-contact">
+                        <i class="fas fa-envelope"></i>
+                        <a href="mailto:bscq2@cesar.school">bscq2@cesar.school</a>
+                    </div>
+                </div>
+
+                <div class="member-card">
+                    <img src="https://raw.githubusercontent.com/albertstorres/imagem-embed/main/lorena.jpeg" alt="Foto de Lorena Torres" class="member-photo">
+                    <div class="member-name">LORENA TORRES</div>
+                    <div class="member-role">Designer Estratégica</div>
+                    <div class="member-contact">
+                        <i class="fas fa-envelope"></i>
+                        <a href="mailto:lts@cesar.school">lts@cesar.school</a>
+                    </div>
+                </div>
+
+                <div class="member-card">
+                    <img src="https://raw.githubusercontent.com/albertstorres/imagem-embed/main/luan.jpeg" alt="Foto de Luan Menezes" class="member-photo">
+                    <div class="member-name">LUAN MENEZES</div>
+                    <div class="member-role">Dev. Front-end</div>
+                    <div class="member-contact">
+                        <i class="fas fa-envelope"></i>
+                        <a href="mailto:lhsm2@cesar.school">lhsm2@cesar.school</a>
+                    </div>
+                </div>
+
+                <div class="member-card">
+                    <img src="https://raw.githubusercontent.com/albertstorres/imagem-embed/main/taina.jpeg" alt="Foto de Tainá Sampaio" class="member-photo">
+                    <div class="member-name">TAINÁ SAMPAIO</div>
+                    <div class="member-role">Designer de Produto</div>
+                    <div class="member-contact">
+                        <i class="fas fa-envelope"></i>
+                        <a href="mailto:tcs@cesar.school">tcs@cesar.school</a>
+                    </div>
+                </div>
+
+                <div class="member-card">
+                    <img src="https://raw.githubusercontent.com/albertstorres/imagem-embed/main/victor.jpeg" alt="Foto de Victor Colleto" class="member-photo">
+                    <div class="member-name">VICTOR COLLETO</div>
+                    <div class="member-role">Analista de Projetos</div>
+                    <div class="member-contact">
+                        <i class="fas fa-envelope"></i>
+                        <a href="mailto:vca@cesar.school">vca@cesar.school</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide">
+            <h2><i class="fas fa-tasks" style="margin-right: 10px;"></i> Planejado x Realizado</h2>
+            
+            <p>O projeto concluiu as fases de <b>Planejamento</b> e <b>Análise de Requisitos</b> e se encontra no <b>início do Design/Desenvolvimento (Fase 3/4 do SDLC)</b>, com <b>65%</b> do total ainda a ser concluído.</p>
+
+            <h3>Atividades Realizadas (Conclusão das Fases 1 e 2 do SDLC):</h3>
+            <ul>
+                <li>Definição e Validação Detalhada do Desafio/Problema.</li>
+                <li>Pesquisa e Análise da Concorrência (Identificação de <b>Gaps</b> e Falhas).</li>
+                <li>Geração de Ideias por meio de <b>Brainstorming</b>.</li>
+                <li>Definição da Proposta de Valor e Estrutura do MVP (<b>oMenu</b>).</li>
+                <li>Criação do Protótipo de Baixa Fidelidade (HTML/Google Sites).</li>
+                <li>Definição do Modelo de Negócio (Assinatura <b>SaaS</b>).</li>
+            </ul>
+        </div>
+        
+        <div class="slide">
+            <h2><i class="fas fa-clipboard-check" style="margin-right: 10px;"></i> Pontos Fortes e de Melhoria</h2>
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>Ponto</th>
+                        <th>Descrição</th>
+                        <th>Mitigação (Equipe)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><b>Projeto (Forte)</b></td>
+                        <td>Diferencial Competitivo Inovador: Acessibilidade <b>100% nativa via IA</b> e conformidade com a LBI.</td>
+                        <td>N/A</td>
+                    </tr>
+                    <tr>
+                        <td><b>Equipe (Forte)</b></td>
+                        <td>Foco Claro na Proposta de Valor (<b>Autonomia</b>) e garantia da <b>entrega macro</b> do projeto no prazo estabelecido.</td>
+                        <td>N/A</td>
+                    </tr>
+                    <tr>
+                        <td><b>Equipe (Crítico)</b></td>
+                        <td><b>Baixo Engajamento e Comunicação Insatisfatória.</b> Houve falhas internas na colaboração e na comunicação.</td>
+                        <td><b>1. Reuniões Diárias de 15 minutos</b> (Daily Stand-up). <b>2. Criação de Cronograma Detalhado</b> com nome e tarefa da pessoa responsável.</td>
+                    </tr>
+                    <tr>
+                        <td><b>Projeto (Melhoria)</b></td>
+                        <td>Complexidade técnica da <b>Voz via IA</b> e da usabilidade com <b>screen readers</b>.</td>
+                        <td>Implementar uma <b>Gestão Rigorosa do Escopo</b>, focando apenas nas funcionalidades estritamente essenciais para o <b>MVP</b>.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+
+</body>
+</html>

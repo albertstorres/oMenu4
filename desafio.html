@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>oMenu - A Problemática</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body { 
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; 
+            background: linear-gradient(135deg, #f9fafb 0%, #f3f4f6 100%);
+            padding: 20px;
+            line-height: 1.6;
+            color: #374151;
+        }
+        
+        .container { 
+            max-width: 1200px; 
+            margin: 0 auto; 
+            background-color: #ffffff; 
+            padding: 40px; 
+            border-radius: 20px; 
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+        }
+        
+        h1 { 
+            text-align: center; 
+            color: #111827; 
+            margin-bottom: 16px; 
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #f97316, #ef4444);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .intro-text { 
+            text-align: center; 
+            font-size: 1.125rem; 
+            color: #6b7280; 
+            margin-bottom: 48px; 
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            font-style: italic;
+        }
+        
+        h2 {
+            color: #374151;
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin: 48px 0 24px 0;
+            padding-bottom: 12px;
+            border-bottom: 2px solid #e5e7eb;
+        }
+
+        /* Estilo para o box de destaque do problema central */
+        .problem-highlight {
+            background: linear-gradient(135deg, #fef3c7, #fde68a);
+            border: none;
+            padding: 32px;
+            margin-top: 40px;
+            border-radius: 16px;
+            position: relative;
+            overflow: hidden;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        
+        .problem-highlight::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(249, 115, 22, 0.1), rgba(239, 68, 68, 0.1));
+            z-index: 0;
+        }
+        
+        .problem-highlight > * {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .problem-highlight:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 24px rgba(249, 115, 22, 0.15);
+        }
+
+        .problem-highlight h2 {
+            color: #92400e;
+            font-weight: 700;
+            font-size: 1.8rem;
+            border: none;
+            margin: 0 0 16px 0;
+            padding: 0;
+        }
+
+        .problem-highlight p {
+            font-size: 1.125rem;
+            color: #374151;
+            line-height: 1.7;
+        }
+
+        /* Layout dos cards */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+            margin: 40px 0;
+        }
+
+        /* Estilo para os cards de Causa/Consequência */
+        .issue-card {
+            background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+            border: 2px solid #e2e8f0;
+            border-radius: 16px;
+            padding: 24px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            position: relative;
+            overflow: hidden;
+            height: 100%;
+        }
+
+        .issue-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12);
+            border-color: #cbd5e1;
+        }
+
+        .issue-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            transition: all 0.3s ease;
+        }
+
+        .cause-card::before {
+            background: linear-gradient(135deg, #fbbf24, #f59e0b);
+        }
+
+        .consequence-card::before {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+        }
+
+        .cause-card:hover {
+            border-color: #f59e0b;
+        }
+
+        .consequence-card:hover {
+            border-color: #ef4444;
+        }
+
+        .issue-icon {
+            font-size: 2.5rem;
+            margin-bottom: 16px;
+            display: block;
+        }
+
+        .cause-card .issue-icon { 
+            color: #f59e0b; 
+        }
+        
+        .consequence-card .issue-icon { 
+            color: #ef4444; 
+        }
+
+        .card-text-bold {
+            font-weight: 600;
+            color: #1f2937;
+            font-size: 1.125rem;
+            margin-bottom: 12px;
+        }
+
+        .card-text-small {
+            font-size: 0.95rem;
+            color: #4b5563;
+            line-height: 1.6;
+        }
+
+        /* Separadores */
+        .separator {
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #e5e7eb, transparent);
+            margin: 48px 0;
+        }
+
+        /* Responsividade */
+        @media (max-width: 768px) {
+            .container {
+                padding: 24px;
+                margin: 10px;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .cards-grid {
+                grid-template-columns: 1fr;
+                gap: 16px;
+            }
+            
+            .issue-card {
+                padding: 20px;
+            }
+            
+            .problem-highlight {
+                padding: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>A Problemática: Exclusão e Perda de Autonomia</h1>
+        <p class="intro-text">Análise de Causas e Consequências da Falta de Acessibilidade no Foodservice.</p>
+        
+        <div class="problem-highlight">
+            <h2>O Desafio Central</h2>
+            <p>O principal desafio está na <strong>falta de acessibilidade digital e física</strong> que impede a <strong>autonomia</strong> de pessoas com deficiência visual ao frequentar estabelecimentos de alimentação, especialmente no acesso a informações cruciais como o cardápio.</p>
+        </div>
+
+        <div class="separator"></div>
+
+        <h2><i class="fas fa-search" style="margin-right: 8px; color: #f59e0b;"></i> CAUSAS: O Lado do Mercado</h2>
+        <div class="cards-grid">
+            <div class="issue-card cause-card">
+                <i class="fas fa-lightbulb issue-icon"></i>
+                <p class="card-text-bold">Falta de Conscientização</p>
+                <p class="card-text-small">Baixa percepção dos empresários sobre a importância e a <strong>obrigação legal</strong> (LBI) da acessibilidade digital.</p>
+            </div>
+
+            <div class="issue-card cause-card">
+                <i class="fas fa-dollar-sign issue-icon"></i>
+                <p class="card-text-bold">Barreira de Custo</p>
+                <p class="card-text-small">Percepção de <strong>custos elevados</strong> e recorrentes para implementar tecnologias inclusivas.</p>
+            </div>
+
+            <div class="issue-card cause-card">
+                <i class="fas fa-tools issue-icon"></i>
+                <p class="card-text-bold">Lacuna Tecnológica</p>
+                <p class="card-text-small">Carência de ferramentas que integrem <strong>acessibilidade total</strong> (voz, contraste) e <strong>gestão operacional</strong> eficiente.</p>
+            </div>
+
+            <div class="issue-card cause-card">
+                <i class="fas fa-city issue-icon"></i>
+                <p class="card-text-bold">Incentivo Público Fraco</p>
+                <p class="card-text-small">Lacunas em políticas públicas que incentivem a inclusão tecnológica e a modernização do setor.</p>
+            </div>
+        </div>
+
+        <div class="separator"></div>
+
+        <h2><i class="fas fa-exclamation-circle" style="margin-right: 8px; color: #ef4444;"></i> CONSEQUÊNCIAS: Impacto Negativo</h2>
+        <div class="cards-grid">
+            <div class="issue-card consequence-card">
+                <i class="fas fa-user-times issue-icon"></i>
+                <p class="card-text-bold">Perda de Autonomia e Exclusão</p>
+                <p class="card-text-small">O cliente tem seu <strong>direito à autonomia cerceado</strong>, dependendo de terceiros para escolher, o que gera <strong>frustração</strong> e limita a experiência social básica.</p>
+            </div>
+
+            <div class="issue-card consequence-card">
+                <i class="fas fa-hand-holding-usd issue-icon"></i>
+                <p class="card-text-bold">Prejuízo ao Negócio</p>
+                <p class="card-text-small">O estabelecimento sofre <strong>perda de clientes</strong> e faturamento, cria uma <strong>imagem negativa</strong> de exclusão e corre risco de <strong>descumprimento das normas legais</strong>.</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
