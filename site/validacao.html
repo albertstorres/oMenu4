@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Validação Técnica do Produto: oMenu4</title>
+    <!-- Carrega o Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6; /* light gray background */
+        }
+        .deploy-button {
+            transition: transform 0.1s ease-in-out, box-shadow 0.1s ease-in-out;
+            background: linear-gradient(120deg, #f97316, #ef4444); /* Cores do styles.css (Laranja p/ Vermelho) */
+        }
+        .deploy-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(239, 68, 68, 0.5), 0 4px 6px -2px rgba(239, 68, 68, 0.3);
+        }
+        h2 {
+            border-bottom: 2px solid #e5e7eb;
+            padding-bottom: 0.5rem;
+            margin-top: 1.5rem;
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1f2937;
+        }
+        h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #374151;
+            margin-top: 1rem;
+            margin-bottom: 0.5rem;
+        }
+        /* Estilo para a tabela */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 1.5rem;
+        }
+        th, td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid #f3f4f6;
+        }
+        th {
+            background-color: #f9fafb;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.875rem;
+            color: #4b5563;
+        }
+        td:nth-child(1) {
+            font-weight: 600;
+        }
+        /* Estilo para listas (Foco A11y) */
+        ul {
+            list-style: none;
+            padding-left: 0;
+        }
+        li {
+            margin-bottom: 0.5rem;
+            padding-left: 1.5rem;
+            position: relative;
+            color: #4b5563;
+        }
+        li:before {
+            content: "✓";
+            color: #10b981; /* green checkmark */
+            font-weight: 700;
+            position: absolute;
+            left: 0;
+        }
+        /* Classe CSS para o quadrado de cor */
+        .color-swatch {
+            display: inline-block;
+            width: 1.25rem;
+            height: 1.25rem;
+            border-radius: 0.25rem;
+            vertical-align: middle;
+            margin-left: 0.5rem;
+            border: 1px solid #e5e7eb;
+        }
+    </style>
+</head>
+<body class="p-4 sm:p-8">
+
+    <!-- Card Principal de Validação -->
+    <div class="bg-white p-6 sm:p-10 rounded-xl shadow-2xl max-w-4xl mx-auto">
+        
+        <h1 class="text-3xl sm:text-4xl font-extrabold text-gray-800 mb-6 border-b-4 border-red-500 pb-2">
+            Análise Técnica: oMenu
+        </h1>
+        
+        <p class="text-lg text-gray-600 mb-8 leading-relaxed">
+            O <b>oMenu</b> é uma Single Page Application (SPA), focada em <b>acessibilidade (A11y)</b> e <b>performance</b>, desenvolvida para otimizar a experiência de consulta de um cardápio digital.
+        </p>
+
+        <!-- Seção 1: Stack Tecnológica Completa (FRONTEND e BACKEND) -->
+        <h2>1. Stack Tecnológica Completa</h2>
+        <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-200 shadow-sm rounded-lg">
+                <thead>
+                    <tr>
+                        <th>Componente</th>
+                        <th>Tecnologia</th>
+                        <th>Detalhe</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-100">
+                    <!-- FRONTEND STACK -->
+                    <tr><td>Framework (Front)</td><td><b>React (v18.2.0)</b></td><td>Componentes funcionais, Hooks e Roteamento (React Router DOM).</td></tr>
+                    <tr><td>Linguagem (Front)</td><td><b>TypeScript</b></td><td>Tipagem estrita (`strict: true`) para maior escalabilidade.</td></tr>
+                    <tr><td>UI/UX</td><td><b>Radix UI & Lucide</b></td><td>Primitivos de acessibilidade (Radix) e ícones modernos.</td></tr>
+                    <tr><td>Comunicação</td><td><b>Axios (v1.8.4)</b></td><td>Cliente HTTP para consumo de API.</td></tr>
+                    
+                    <!-- BACKEND STACK (NOVO) -->
+                    <tr><td class="bg-yellow-50">Backend (API)</td><td class="bg-yellow-50"><b>Django Rest Framework (DRF)</b></td><td class="bg-yellow-50">API robusta, segura e escalável em Python.</td></tr>
+                    <tr><td class="bg-yellow-50">Banco de Dados</td><td class="bg-yellow-50"><b>PostgreSQL</b></td><td class="bg-yellow-50">Banco de dados relacional para alta integridade de dados.</td></tr>
+                    <tr><td class="bg-yellow-50">Voz IA (TTS)</td><td class="bg-yellow-50"><b>Amazon Polly</b></td><td class="bg-yellow-50">Serviço de Text-to-Speech para acessibilidade.</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <h3>1.5. Armazenamento de Mídia</h3>
+        <ul class="mb-6">
+            <li><b>Solução</b>: Amazon Web Services (AWS) Simple Storage Service (S3).</li>
+            <li><b>Uso</b>: O Backend do DRF gerencia os links para imagens e vídeos de produtos, armazenados de forma eficiente e acessível via S3.</li>
+            <li><b>Benefício</b>: Desacopla o armazenamento do servidor de aplicação, garantindo alta disponibilidade, durabilidade e escalabilidade (principalmente para vídeos de demonstração de pratos).</li>
+        </ul>
+
+        <!-- Seção 2: Foco Acessibilidade -->
+        <h2>2. Foco: Acessibilidade (A11y)</h2>
+        <p class="mb-4 text-gray-700">A aplicação prioriza a navegação por teclado e leitores de tela:</p>
+        <ul class="mb-6">
+            <li><b>Links de Pulo (`.skip-link`)</b>: Permite navegação direta ao conteúdo principal.</li>
+            <li><b>Semântica ARIA</b>: Uso de atributos ARIA (`aria-disabled`, `role="status"`) para clareza sobre o estado dos elementos.</li>
+            <li>
+                <b>Foco Visual</b>: Destaque claro 
+                <span class="color-swatch" style="background-color: #f97316;" aria-label="Cor Laranja de Destaque"></span>
+                para navegação por teclado.
+            </li>
+        </ul>
+
+        <!-- Seção 3: Estratégia de Infraestrutura e Deploy -->
+        <h2>3. Estratégia de Infraestrutura e Deploy</h2>
+        
+        <h3>A. CI/CD e Produção (Vercel)</h3>
+        <ul class="mb-6">
+            <li><b>Plataforma</b>: Vercel (ideal para Frontend SPA).</li>
+            <li><b>Roteamento SPA</b>: O `vercel.json` reescreve todas as rotas não estáticas para `/index.html`.</li>
+            <li><b>Performance</b>: Uso de headers de cache agressivos (1 ano, `immutable`) para ativos estáticos.</li>
+            <li><b>Diretório</b>: Deploy executado a partir de `frontend/`.</li>
+        </ul>
+
+        <h3>B. Contêineres (Docker/Nginx)</h3>
+        <ul class="mb-6">
+            <li><b>`Dockerfile`</b>: Utiliza um <b>Multi-Stage Build</b> para gerar uma imagem final pequena e otimizada (`node:18-alpine` → `nginx:alpine`).</li>
+            <li><b>`nginx.conf`</b>: Configurado para roteamento SPA (`try_files`), compressão <b>Gzip</b> e regras de cache de longo prazo.</li>
+            <li><b>`docker-compose.yml`</b>: Orquestração local, mapeando porta `3000` do host para `80` do container.</li>
+        </ul>
+        
+        <!-- Seção 4: Fluxo de Trabalho e DevOps -->
+        <h2>4. Fluxo de Trabalho e DevOps</h2>
+        <p class="mb-4 text-gray-700">Utiliza um fluxo simplificado de branches para gerenciar ambientes:</p>
+        <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-200 shadow-sm rounded-lg">
+                <thead>
+                    <tr>
+                        <th>Branch</th>
+                        <th>Propósito</th>
+                        <th>Deploy</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-100">
+                    <tr><td><b>`main`</b></td><td><b>Produção (Estável)</b></td><td>Dispara Deploy em Produção (Vercel)</td></tr>
+                    <tr><td><b>`hml`</b></td><td><b>Homologação/Desenvolvimento</b></td><td>Dispara Deploy de Preview (Vercel)</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <p class="text-gray-700 mt-6 mb-8">
+            Este modelo garante que as funcionalidades são testadas em `hml` antes de serem promovidas para `main`.
+        </p>
+        
+        <!-- Botão de Redirecionamento (Estilo replicado do arquivo anterior) -->
+        <div class="flex justify-center mt-8 pt-6 border-t border-gray-100">
+            <a 
+                href="https://o-menu4.vercel.app/" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                class="deploy-button inline-flex items-center justify-center 
+                       px-8 py-3 text-lg font-semibold 
+                       rounded-lg shadow-lg 
+                       text-white 
+                       hover:from-red-600 hover:to-orange-600 
+                       focus:outline-none focus:ring-4 focus:ring-red-300">
+                Vamos validar?
+                <!-- Ícone de seta para indicar link externo -->
+                <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0l-6 6"></path>
+                </svg>
+            </a>
+        </div>
+    </div>
+
+</body>
+</html>
