@@ -106,11 +106,10 @@ const Home: React.FC = () => {
                 <UtensilsCrossed className="hero-icon-svg" />
               </div>
               <h1 className="hero-title">
-                CardápioDigital
+                oMenu
               </h1>
               <p className="hero-description">
-                Sistema completo de cardápio digital com recursos de acessibilidade 
-                para restaurantes modernos
+                Acessibilidade que o seu cliente exige. Performance que o seu negócio precisa.
               </p>
             </div>
             <div className="hero-actions">
