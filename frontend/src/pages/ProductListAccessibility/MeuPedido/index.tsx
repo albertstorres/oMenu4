@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { ChefHat, CheckCircle2, ArrowLeft, Receipt, CreditCard, Moon, Sun, Volume2 } from 'lucide-react';
 import { useTextToSpeech } from '../../../hooks/useTextToSpeech';
-import { useAuth } from '../../../contexts/AuthContext';
 // TODO: REMOVER QUANDO BACKEND FOR IMPLEMENTADO - useOrder é temporário
+// import { useAuth } from '../../../contexts/AuthContext'; // TODO: Usar quando necessário
 // import { useOrder } from '../../../contexts/OrderContext';
 import { mockAPI } from '../../../data/mock';
 import './styles.css';
@@ -26,7 +26,7 @@ const MeuPedido: React.FC = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const orderId = searchParams.get('pedido');
-  const { user } = useAuth();
+  // const { user } = useAuth(); // TODO: Usar quando necessário
   // TODO: REMOVER QUANDO BACKEND FOR IMPLEMENTADO - useOrder é temporário
   // const { getOrderById, getLastOrder, currentOrder } = useOrder();
   const { read } = useTextToSpeech({ lang: 'pt-BR' });
@@ -34,29 +34,14 @@ const MeuPedido: React.FC = () => {
   // HARD CODE TEMPORÁRIO: Mesa fixa = 5 (remover quando backend estiver pronto)
   const tableNumber = '5';
   const [orders, setOrders] = useState<Order[]>([]);
-  const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
+  // const [selectedOrder, setSelectedOrder] = useState<Order | null>(null); // TODO: Usar quando necessário
+  const [, setSelectedOrder] = useState<Order | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [showBill, setShowBill] = useState<boolean>(false);
   const [paymentCompleted, setPaymentCompleted] = useState<boolean>(false);
   const [darkMode, setDarkMode] = useState<boolean>(false);
 
-  useEffect(() => {
-    document.documentElement.setAttribute('lang', 'pt-BR');
-    loadOrders();
-    
-    // Simular atualização de status (em produção viria do backend via WebSocket ou polling)
-    const interval = setInterval(() => {
-      loadOrders();
-    }, 5000);
-
-    return () => clearInterval(interval);
-  }, []);
-
-  useEffect(() => {
-    document.documentElement.classList.toggle('dark-mode', darkMode);
-  }, [darkMode]);
-
-  const loadOrders = async () => {
+  const loadOrders = useCallback(async () => {
     try {
       // TODO: REMOVER HARD CODE - Quando backend for implementado, buscar pedidos da mesa via API
       // Por enquanto, buscar todos os pedidos e filtrar por mesa (hardcoded mesa 5)
@@ -90,7 +75,23 @@ const MeuPedido: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [orderId, tableNumber]);
+
+  useEffect(() => {
+    document.documentElement.setAttribute('lang', 'pt-BR');
+    loadOrders();
+    
+    // Simular atualização de status (em produção viria do backend via WebSocket ou polling)
+    const interval = setInterval(() => {
+      loadOrders();
+    }, 5000);
+
+    return () => clearInterval(interval);
+  }, [loadOrders]);
+
+  useEffect(() => {
+    document.documentElement.classList.toggle('dark-mode', darkMode);
+  }, [darkMode]);
 
   const toggleDarkMode = () => {
     setDarkMode(!darkMode);
@@ -266,7 +267,7 @@ const MeuPedido: React.FC = () => {
               const isReady = order.status === 'ready';
               
               return (
-                <article key={order.id} className="order-card" role="article" aria-labelledby={`order-${order.id}-title`}>
+                <article key={order.id} className="order-card" aria-labelledby={`order-${order.id}-title`}>
                   <header className="order-card-header">
                     <h3 id={`order-${order.id}-title`} className="order-card-title">
                       Pedido #{order.id.slice(-6)}
@@ -558,11 +559,11 @@ const MeuPedido: React.FC = () => {
                 <div className="bill-body">
               <section className="bill-items" aria-labelledby="bill-items-title">
                 <h3 id="bill-items-title" className="visually-hidden">Itens de Todos os Pedidos</h3>
-                <ul className="bill-items-list" role="list">
+                <ul className="bill-items-list">
                   {orders.map((order, orderIndex) => (
                     <React.Fragment key={order.id}>
                       {order.items.map((item, itemIndex) => (
-                        <li key={`${order.id}-${itemIndex}`} className="bill-item" role="listitem">
+                        <li key={`${order.id}-${itemIndex}`} className="bill-item">
                           <div className="bill-item-info">
                             <span className="bill-item-name">{item.name}</span>
                             <span className="bill-item-quantity" aria-label={`Quantidade: ${item.quantity}`}>

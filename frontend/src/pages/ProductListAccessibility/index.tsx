@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import { Search, Filter, Plus, Moon, Sun, Volume2, ChevronRight, ShoppingCart } from 'lucide-react';
 import { useTextToSpeech } from '../../hooks/useTextToSpeech';
 import { useCart } from '../../contexts/CartContext';
@@ -19,6 +20,7 @@ interface Product {
 
 const ProductListAccessibility: React.FC = () => {
   const { addItem, setIsOpen, cart, isOpen } = useCart();
+  const location = useLocation();
   
   // Debug: verificar quando itens são adicionados
   useEffect(() => {
@@ -49,6 +51,42 @@ const ProductListAccessibility: React.FC = () => {
   useEffect(() => {
     document.documentElement.classList.toggle('dark-mode', darkMode);
   }, [darkMode]);
+
+  // Ler mensagem de boas-vindas quando o usuário entrar na página
+  useEffect(() => {
+    if (location.pathname === '/acessibilidade') {
+      const welcomeMessage = 'Cardápio Digital Acessível. Use o teclado para navegar: Tab para avançar, Shift+Tab para voltar. Pressione Enter no botão "Adicionar ao pedido" para colocar o prato no carrinho.';
+      // Pequeno delay para garantir que o leitor de tela esteja pronto
+      const timer = setTimeout(() => {
+        read(welcomeMessage);
+      }, 500);
+      return () => clearTimeout(timer);
+    }
+  }, [location.pathname, read]);
+
+  // Ler automaticamente quando o filtro de busca mudar
+  useEffect(() => {
+    if (searchTerm && !loading) {
+      const timer = setTimeout(() => {
+        read(`Buscando por: ${searchTerm}`);
+      }, 300);
+      return () => clearTimeout(timer);
+    }
+  }, [searchTerm, loading, read]);
+
+  // Ler automaticamente quando o filtro de categoria mudar
+  useEffect(() => {
+    if (!loading) {
+      const timer = setTimeout(() => {
+        if (selectedCategory === 'all') {
+          read('Filtro de categoria: Todas as categorias');
+        } else {
+          read(`Filtro de categoria: ${selectedCategory}`);
+        }
+      }, 300);
+      return () => clearTimeout(timer);
+    }
+  }, [selectedCategory, loading, read]);
 
   const loadProducts = async (): Promise<void> => {
     try {
@@ -116,8 +154,32 @@ const ProductListAccessibility: React.FC = () => {
     read(text, element || undefined);
   };
 
+  const readFiltersInstructions = () => {
+    const element = document.getElementById('filters-instructions');
+    const text = 'Todos os campos têm rótulos. Informe o termo desejado ou escolha uma categoria para refinar os resultados.';
+    read(text, element || undefined);
+  };
+
+  const readSearchField = () => {
+    const element = document.getElementById('search-products');
+    const searchText = searchTerm 
+      ? `Campo buscar pratos. Valor atual: ${searchTerm}`
+      : 'Campo buscar pratos. Nenhum termo informado';
+    read(searchText, element || undefined);
+  };
+
+  const readCategoryField = () => {
+    const element = document.getElementById('category-select');
+    const categoryText = selectedCategory === 'all'
+      ? 'Campo filtrar por categoria. Selecionado: Todas as categorias'
+      : `Campo filtrar por categoria. Selecionado: ${selectedCategory}`;
+    read(categoryText, element || undefined);
+  };
+
   const toggleDarkMode = () => {
-    setDarkMode(!darkMode);
+    const newDarkMode = !darkMode;
+    setDarkMode(newDarkMode);
+    read(newDarkMode ? 'Modo escuro ativado' : 'Modo claro ativado');
   };
 
   if (loading) {
@@ -184,13 +246,37 @@ const ProductListAccessibility: React.FC = () => {
 
       <main id="conteudo-principal" role="main" aria-live="polite" data-testid="main-content">
         <section className="filters-section-accessible" aria-labelledby="filtros-cardapio" data-testid="filters-section">
-          <h2 id="filtros-cardapio">Filtros do cardápio</h2>
+          <div className="section-header-with-read">
+            <h2 id="filtros-cardapio">Filtros do cardápio</h2>
+            <button
+              type="button"
+              className="read-section-button"
+              onClick={readFiltersInstructions}
+              aria-label="Ler instruções dos filtros"
+              data-testid="read-filters-instructions"
+            >
+              <Volume2 aria-hidden="true" />
+              Ler Instruções
+            </button>
+          </div>
           <p id="filters-instructions">
             Todos os campos têm rótulos. Informe o termo desejado ou escolha uma categoria para refinar os resultados.
           </p>
           <div className="filters-grid" aria-describedby="filters-instructions" data-testid="filters-grid">
             <div className="filter-field">
-              <label htmlFor="search-products">Buscar pratos</label>
+              <div className="filter-field-header">
+                <label htmlFor="search-products">Buscar pratos</label>
+                <button
+                  type="button"
+                  className="read-filter-button"
+                  onClick={readSearchField}
+                  aria-label="Ler campo buscar pratos"
+                  data-testid="read-search-field"
+                >
+                  <Volume2 aria-hidden="true" />
+                  Ler
+                </button>
+              </div>
               <div className="input-with-icon">
                 <Search aria-hidden="true" focusable="false" className="field-icon" />
                 <input
@@ -208,7 +294,19 @@ const ProductListAccessibility: React.FC = () => {
             </div>
 
             <div className="filter-field">
-              <label htmlFor="category-select">Filtrar por categoria</label>
+              <div className="filter-field-header">
+                <label htmlFor="category-select">Filtrar por categoria</label>
+                <button
+                  type="button"
+                  className="read-filter-button"
+                  onClick={readCategoryField}
+                  aria-label="Ler campo filtrar por categoria"
+                  data-testid="read-category-field"
+                >
+                  <Volume2 aria-hidden="true" />
+                  Ler
+                </button>
+              </div>
               <div className="input-with-icon">
                 <Filter aria-hidden="true" focusable="false" className="field-icon" />
                 <select

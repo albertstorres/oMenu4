@@ -108,9 +108,14 @@ const Home: React.FC = () => {
               <h1 className="hero-title">
                 oMenu
               </h1>
-              <p className="hero-description">
-                Acessibilidade que o seu cliente exige. Performance que o seu negócio precisa.
-              </p>
+              <div className="hero-description">
+                <p className="hero-description-text">
+                  Acessibilidade não é custo, é receita.
+                </p>
+                <p className="hero-description-highlight">
+                  Destrave R$ 4,24 Bilhões do mercado que seus concorrentes ignoram.
+                </p>
+              </div>
             </div>
             <div className="hero-actions">
               <Button 
