@@ -1,4 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+// TODO: REMOVER HARD CODE - Quando backend for implementado, reativar useSearchParams
+// import { useSearchParams } from 'react-router-dom';
 import { Button } from '../ui/button';
 import { Badge } from '../ui/badge';
 import { Card, CardContent } from '../ui/card';
@@ -13,7 +15,6 @@ import {
   SheetTitle,
 } from '../ui/sheet';
 import { useCart } from '../../contexts/CartContext';
-import { useAuth } from '../../contexts/AuthContext';
 import { useToast } from '../../hooks/use-toast';
 import { mockAPI } from '../../data/mock';
 import { 
@@ -23,17 +24,13 @@ import {
   Trash2, 
   CreditCard,
   MapPin,
-  User
+  CheckCircle2
 } from 'lucide-react';
 import './styles.css';
 
-interface CustomerInfo {
-  name: string;
-  tableNumber: string;
-  notes: string;
-}
-
 const CartSidebar: React.FC = () => {
+  // TODO: REMOVER HARD CODE - Quando backend for implementado, reativar useSearchParams
+  // const [searchParams] = useSearchParams();
   const { 
     cart, 
     isOpen, 
@@ -41,16 +38,33 @@ const CartSidebar: React.FC = () => {
     updateQuantity, 
     removeItem, 
     clearCart,
-    setTableNumber 
+    // TODO: REMOVER HARD CODE - Quando backend for implementado, reativar setTableNumber
+    // setTableNumber 
   } = useCart();
-  const { user, isAuthenticated } = useAuth();
   const { toast } = useToast();
-  const [customerInfo, setCustomerInfo] = useState<CustomerInfo>({
-    name: '',
-    tableNumber: cart.tableNumber || '',
-    notes: ''
-  });
+  const [notes, setNotes] = useState<string>('');
   const [processing, setProcessing] = useState<boolean>(false);
+  const [orderSent, setOrderSent] = useState<boolean>(false);
+  
+  // TODO: REMOVER HARD CODE - Quando o backend for implementado, obter mesa dos query params
+  // const tableNumber = searchParams.get('mesa') || searchParams.get('table') || '';
+  // HARD CODE TEMPORÁRIO: Mesa fixa = 5 (remover quando backend estiver pronto)
+  const tableNumber = '5';
+
+  // TODO: REMOVER - Atualizar número da mesa no contexto quando mudar (quando backend estiver pronto)
+  // useEffect(() => {
+  //   if (tableNumber) {
+  //     setTableNumber(tableNumber);
+  //   }
+  // }, [tableNumber, setTableNumber]);
+
+  // Resetar estado quando o carrinho fechar
+  useEffect(() => {
+    if (!isOpen) {
+      setOrderSent(false);
+      setNotes('');
+    }
+  }, [isOpen]);
 
   const handleQuantityChange = (productId: string, newQuantity: number): void => {
     if (newQuantity <= 0) {
@@ -60,13 +74,18 @@ const CartSidebar: React.FC = () => {
     }
   };
 
-  const handleTableNumberChange = (tableNumber: string): void => {
-    setCustomerInfo(prev => ({ ...prev, tableNumber }));
-    setTableNumber(tableNumber);
-  };
-
   const handleCheckout = async (): Promise<void> => {
+    console.log('🚀 === handleCheckout INICIADO ===', {
+      itemsCount: cart.items.length,
+      tableNumber,
+      processing,
+      orderSent,
+      cartItems: cart.items
+    });
+    
+    // Validações básicas
     if (cart.items.length === 0) {
+      console.log('❌ Carrinho vazio!');
       toast({
         title: "Carrinho vazio",
         description: "Adicione itens ao carrinho antes de finalizar o pedido.",
@@ -75,21 +94,32 @@ const CartSidebar: React.FC = () => {
       return;
     }
 
-    if (!customerInfo.tableNumber) {
-      toast({
-        title: "Mesa obrigatória",
-        description: "Por favor, informe o número da mesa.",
-        variant: "destructive",
-      });
+    // TODO: REMOVER HARD CODE - Quando backend for implementado, reativar validação de mesa
+    // if (!tableNumber) {
+    //   console.log('❌ Mesa não informada!', { tableNumber, url: window.location.href });
+    //   toast({
+    //     title: "Mesa não informada",
+    //     description: "O número da mesa deve ser informado na URL (ex: ?mesa=5).",
+    //     variant: "destructive",
+    //   });
+    //   return;
+    // }
+
+    if (processing || orderSent) {
+      console.log('❌ Já está processando ou enviado!', { processing, orderSent });
       return;
     }
 
+    // Mostrar estado de processamento
+    console.log('✅ Validações passadas! Iniciando processamento...');
     setProcessing(true);
+    console.log('Estado processing atualizado para true');
 
     try {
       const orderData = {
-        tableNumber: customerInfo.tableNumber,
-        customerName: customerInfo.name || 'Cliente',
+        // TODO: REMOVER HARD CODE - tableNumber vem de query params quando backend estiver pronto
+        tableNumber: tableNumber, // HARD CODE: sempre '5' por enquanto
+        customerName: 'Cliente',
         items: cart.items.map(item => ({
           productId: item.id,
           name: item.name,
@@ -97,46 +127,94 @@ const CartSidebar: React.FC = () => {
           quantity: item.quantity
         })),
         total: cart.total,
-        notes: customerInfo.notes,
+        notes: notes,
         status: 'preparing'
       };
 
+      // Simular delay de processamento
+      await new Promise(resolve => setTimeout(resolve, 800));
+      
       await mockAPI.createOrder(orderData);
-
+      
+      // Exibir animação de sucesso
+      console.log('✅ Pedido criado! Exibindo animação...');
+      setProcessing(false);
+      console.log('setProcessing(false) executado');
+      setOrderSent(true);
+      console.log('setOrderSent(true) executado');
+      
+      // Forçar atualização imediata
+      setTimeout(() => {
+        console.log('Verificando estado após 100ms:', { orderSent });
+      }, 100);
+      
       toast({
         title: "Pedido realizado com sucesso!",
-        description: `Pedido para a mesa ${customerInfo.tableNumber} foi enviado para a cozinha.`,
+        description: `Pedido para a mesa ${tableNumber} foi enviado para a cozinha.`,
       });
 
-      clearCart();
-      setCustomerInfo({ name: '', tableNumber: '', notes: '' });
-      setIsOpen(false);
+      // Fechar carrinho após 2.5 segundos da animação
+      setTimeout(() => {
+        clearCart();
+        setNotes('');
+        setOrderSent(false);
+        setIsOpen(false);
+      }, 2500);
     } catch (error) {
+      console.error('Erro ao criar pedido:', error);
+      setProcessing(false);
+      setOrderSent(false);
       toast({
         title: "Erro ao processar pedido",
         description: "Ocorreu um erro ao enviar o pedido. Tente novamente.",
         variant: "destructive",
       });
-    } finally {
-      setProcessing(false);
     }
   };
+
+  console.log('🔄 Renderizando CartSidebar', { 
+    isOpen, 
+    orderSent, 
+    processing, 
+    itemsCount: cart.items.length,
+    tableNumber, // HARD CODE: sempre '5' por enquanto
+    willShowAnimation: orderSent === true
+  });
 
   return (
     <Sheet open={isOpen} onOpenChange={setIsOpen}>
       <SheetContent className="cart-sheet">
-        <SheetHeader>
-          <SheetTitle className="cart-title">
-            <ShoppingCart className="cart-title-icon" />
-            Carrinho ({cart.items.length})
-          </SheetTitle>
-          <SheetDescription>
-            Revise seus itens e finalize o pedido
-          </SheetDescription>
-        </SheetHeader>
+        {orderSent ? (
+          <div className="order-sent-animation">
+            <div className="success-icon-wrapper">
+              <CheckCircle2 className="success-icon" />
+            </div>
+            <h2 className="success-title">Pedido Enviado!</h2>
+            <p className="success-message">
+              Seu pedido foi enviado para a cozinha com sucesso.
+            </p>
+            {/* TODO: REMOVER HARD CODE - Quando backend estiver pronto, mesa vem de query params */}
+            {/* HARD CODE: Sempre exibe mesa 5 por enquanto */}
+            <p className="success-table">
+              Mesa {tableNumber}
+            </p>
+          </div>
+        ) : (
+          <>
+            <div className="flex-shrink-0">
+              <SheetHeader>
+                <SheetTitle className="cart-title">
+                  <ShoppingCart className="cart-title-icon" />
+                  Carrinho ({cart.items.length})
+                </SheetTitle>
+                <SheetDescription>
+                  Revise seus itens e finalize o pedido
+                </SheetDescription>
+              </SheetHeader>
+            </div>
 
-        <div className="cart-content">
-          {/* Cart Items */}
+            <div className="cart-content">
+          {/* Cart Items - Revisão dos Itens */}
           <div className="cart-items">
             {cart.items.length === 0 ? (
               <div className="empty-cart">
@@ -149,8 +227,10 @@ const CartSidebar: React.FC = () => {
                 </p>
               </div>
             ) : (
-              <div className="cart-items-list">
-                {cart.items.map((item) => (
+              <>
+                <h3 className="cart-items-title">Revisão dos Itens</h3>
+                <div className="cart-items-list">
+                  {cart.items.map((item) => (
                   <Card key={item.id}>
                     <CardContent className="cart-item-content">
                       <div className="cart-item">
@@ -203,8 +283,9 @@ const CartSidebar: React.FC = () => {
                       </div>
                     </CardContent>
                   </Card>
-                ))}
-              </div>
+                  ))}
+                </div>
+              </>
             )}
           </div>
 
@@ -212,35 +293,15 @@ const CartSidebar: React.FC = () => {
           {cart.items.length > 0 && (
             <div className="checkout-section">
               <div className="checkout-content">
-                {/* Customer Info */}
-                <div className="customer-info">
-                  <div className="input-group">
-                    <Label htmlFor="customerName">Nome (opcional)</Label>
-                    <div className="input-with-icon">
-                      <User className="input-icon" />
-                      <Input
-                        id="customerName"
-                        placeholder="Seu nome"
-                        value={customerInfo.name}
-                        onChange={(e) => setCustomerInfo(prev => ({ ...prev, name: e.target.value }))}
-                        className="input-field"
-                      />
-                    </div>
-                  </div>
-
-                  <div className="input-group">
-                    <Label htmlFor="tableNumber">Número da Mesa *</Label>
-                    <div className="input-with-icon">
-                      <MapPin className="input-icon" />
-                      <Input
-                        id="tableNumber"
-                        type="number"
-                        placeholder="Ex: 5"
-                        value={customerInfo.tableNumber}
-                        onChange={(e) => handleTableNumberChange(e.target.value)}
-                        className="input-field"
-                        required
-                      />
+                {/* Informações do Pedido */}
+                <div className="order-info">
+                  {/* TODO: REMOVER HARD CODE - Quando backend estiver pronto, mesa vem de query params */}
+                  {/* HARD CODE: Sempre exibe mesa 5 por enquanto */}
+                  <div className="info-row">
+                    <MapPin className="info-icon" />
+                    <div className="info-content">
+                      <Label className="info-label">Mesa</Label>
+                      <span className="info-value">Mesa {tableNumber}</span>
                     </div>
                   </div>
 
@@ -249,8 +310,8 @@ const CartSidebar: React.FC = () => {
                     <Input
                       id="notes"
                       placeholder="Alguma observação especial?"
-                      value={customerInfo.notes}
-                      onChange={(e) => setCustomerInfo(prev => ({ ...prev, notes: e.target.value }))}
+                      value={notes}
+                      onChange={(e) => setNotes(e.target.value)}
                     />
                   </div>
                 </div>
@@ -271,14 +332,46 @@ const CartSidebar: React.FC = () => {
                 </div>
 
                 {/* Checkout Button */}
-                <Button
-                  onClick={handleCheckout}
-                  disabled={processing || cart.items.length === 0}
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    console.log('=== BOTÃO CLICADO ===', {
+                      processing,
+                      itemsCount: cart.items.length,
+                      orderSent,
+                      tableNumber, // HARD CODE: sempre '5' por enquanto
+                      disabled: processing || cart.items.length === 0 || orderSent
+                    });
+                    try {
+                      handleCheckout();
+                    } catch (error) {
+                      console.error('Erro ao chamar handleCheckout:', error);
+                      alert('Erro: ' + error);
+                    }
+                  }}
+                  disabled={processing || cart.items.length === 0 || orderSent}
                   className="checkout-button"
+                  style={{ 
+                    cursor: (processing || cart.items.length === 0 || orderSent) ? 'not-allowed' : 'pointer',
+                    width: '100%',
+                    padding: '0.75rem 1.5rem',
+                    fontSize: '1rem',
+                    fontWeight: 600,
+                    borderRadius: '0.5rem',
+                    border: 'none',
+                    background: 'linear-gradient(135deg, #f97316 0%, #ef4444 100%)',
+                    color: 'white',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: '0.5rem'
+                  }}
                 >
                   <CreditCard className="checkout-icon" />
-                  {processing ? 'Processando...' : 'Finalizar Pedido'}
-                </Button>
+                  {processing ? 'Processando...' : orderSent ? 'Pedido Enviado!' : 'Finalizar Pedido'}
+                </button>
 
                 <Button
                   variant="outline"
@@ -292,6 +385,8 @@ const CartSidebar: React.FC = () => {
             </div>
           )}
         </div>
+          </>
+        )}
       </SheetContent>
     </Sheet>
   );

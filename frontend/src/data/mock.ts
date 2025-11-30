@@ -130,8 +130,18 @@ export const mockAPI = {
     Promise.resolve(mockTables.find(t => t.id === id)),
   
   getOrders: (): Promise<Order[]> => Promise.resolve(mockOrders),
-  createOrder: (order: any): Promise<any> => 
-    Promise.resolve({ id: Date.now().toString(), ...order, status: 'preparing' }),
+  getOrder: (id: string): Promise<Order | undefined> => 
+    Promise.resolve(mockOrders.find(o => o.id === id)),
+  createOrder: (order: any): Promise<any> => {
+    const newOrder = { 
+      id: Date.now().toString(), 
+      ...order, 
+      status: 'preparing' as const,
+      createdAt: new Date().toISOString()
+    };
+    mockOrders.push(newOrder);
+    return Promise.resolve(newOrder);
+  },
   
   login: (credentials: { email: string; password: string }): Promise<any> => {
     const user = mockUsers.find(u => u.email === credentials.email);

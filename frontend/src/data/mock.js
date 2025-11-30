@@ -206,7 +206,17 @@ export const mockAPI = {
 
   // Pedidos
   getOrders: () => Promise.resolve(mockOrders),
-  createOrder: (order) => Promise.resolve({ id: Date.now().toString(), ...order, status: 'preparing' }),
+  getOrder: (id) => Promise.resolve(mockOrders.find(o => o.id === id)),
+  createOrder: (order) => {
+    const newOrder = { 
+      id: Date.now().toString(), 
+      ...order, 
+      status: 'preparing',
+      createdAt: new Date().toISOString()
+    };
+    mockOrders.push(newOrder);
+    return Promise.resolve(newOrder);
+  },
   updateOrderStatus: (id, status) => Promise.resolve({ success: true }),
 
   // Autenticação

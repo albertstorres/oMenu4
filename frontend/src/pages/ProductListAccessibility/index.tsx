@@ -1,9 +1,10 @@
-import React, { useEffect, useMemo, useState, useRef } from 'react';
-import { Search, Filter, Plus, Play, Pause, Square, Moon, Sun, Volume2, ChevronRight } from 'lucide-react';
+import React, { useEffect, useMemo, useState } from 'react';
+import { Search, Filter, Plus, Moon, Sun, Volume2, ChevronRight, ShoppingCart } from 'lucide-react';
 import { useTextToSpeech } from '../../hooks/useTextToSpeech';
 import { useCart } from '../../contexts/CartContext';
 import { useAuth } from '../../contexts/AuthContext';
 import { mockAPI } from '../../data/mock';
+import CartSidebarAccessibility from '../../components/CartSidebarAccessibility';
 import './styles.css';
 
 interface Product {
@@ -17,7 +18,15 @@ interface Product {
 }
 
 const ProductListAccessibility: React.FC = () => {
-  const { addItem } = useCart();
+  const { addItem, setIsOpen, cart, isOpen } = useCart();
+  
+  // Debug: verificar quando itens são adicionados
+  useEffect(() => {
+    console.log('📦 Itens no carrinho (página acessibilidade):', { 
+      itemsCount: cart.items?.length || 0, 
+      items: cart.items 
+    });
+  }, [cart.items]);
   const { user } = useAuth();
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
@@ -25,25 +34,9 @@ const ProductListAccessibility: React.FC = () => {
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [categories, setCategories] = useState<string[]>([]);
   const [darkMode, setDarkMode] = useState<boolean>(false);
-  const [showAudioControls, setShowAudioControls] = useState<boolean>(true);
-  
-  const titleRef = useRef<HTMLHeadingElement>(null);
-  const filtersRef = useRef<HTMLElement>(null);
-  const resultsRef = useRef<HTMLElement>(null);
 
   const {
-    isReading,
-    isPaused,
-    read,
-    pause,
-    resume,
-    stop,
-    setRate,
-    setPitch,
-    setVolume,
-    rate,
-    pitch,
-    volume
+    read
   } = useTextToSpeech({ lang: 'pt-BR' });
 
   const pageTitle = user?.name ? `Cardápio de ${user.name}` : 'Cardápio Digital Acessível';
@@ -96,7 +89,9 @@ const ProductListAccessibility: React.FC = () => {
 
   const handleAddToCart = (product: Product): void => {
     if (product.available) {
+      console.log('➕ Adicionando produto ao carrinho:', product);
       addItem(product, 1);
+      console.log('✅ Produto adicionado. Carrinho agora tem:', cart.items?.length || 0, 'itens');
       const message = `${product.name} adicionado ao pedido por R$ ${product.price.toFixed(2)}`;
       read(message);
     }
@@ -107,21 +102,6 @@ const ProductListAccessibility: React.FC = () => {
       event.preventDefault();
       handleAddToCart(product);
     }
-  };
-
-  const readTitle = () => {
-    const text = `${pageTitle}. ${document.getElementById('restaurant-context')?.textContent || ''}`;
-    read(text, titleRef.current || undefined);
-  };
-
-  const readFilters = () => {
-    const text = `Filtros do cardápio. ${document.getElementById('filters-instructions')?.textContent || ''}`;
-    read(text, filtersRef.current || undefined);
-  };
-
-  const readResults = () => {
-    const text = document.getElementById('resultado-contagem')?.textContent || '';
-    read(text, resultsRef.current || undefined);
   };
 
   const readProduct = (product: Product) => {
@@ -138,8 +118,6 @@ const ProductListAccessibility: React.FC = () => {
 
   const toggleDarkMode = () => {
     setDarkMode(!darkMode);
-    const message = darkMode ? 'Modo claro ativado' : 'Modo escuro ativado';
-    read(message);
   };
 
   if (loading) {
@@ -159,141 +137,53 @@ const ProductListAccessibility: React.FC = () => {
         Pular para o conteúdo principal
       </a>
 
-      {/* Controles de Acessibilidade */}
-      <div className="accessibility-controls" role="toolbar" aria-label="Controles de acessibilidade" data-testid="accessibility-controls">
-        <div className="controls-group">
-          <h2 className="controls-title">Controles de Leitura</h2>
-          
-          <div className="audio-controls" data-testid="audio-controls">
-            <button
-              type="button"
-              className="control-button"
-              onClick={isReading && !isPaused ? pause : resume}
-              disabled={!isReading && !isPaused}
-              aria-label={isReading && !isPaused ? 'Pausar leitura' : 'Retomar leitura'}
-              data-testid="play-pause-button"
-            >
-              {isReading && !isPaused ? <Pause aria-hidden="true" /> : <Play aria-hidden="true" />}
-              <span className="visually-hidden">{isReading && !isPaused ? 'Pausar' : 'Reproduzir'}</span>
-            </button>
-
-            <button
-              type="button"
-              className="control-button"
-              onClick={stop}
-              disabled={!isReading && !isPaused}
-              aria-label="Parar leitura"
-              data-testid="stop-button"
-            >
-              <Square aria-hidden="true" />
-              <span className="visually-hidden">Parar</span>
-            </button>
-
-            <div className="speed-control" data-testid="speed-control">
-              <label htmlFor="speed-slider">Velocidade</label>
-              <input
-                id="speed-slider"
-                type="range"
-                min="0.5"
-                max="2"
-                step="0.1"
-                value={rate}
-                onChange={(e) => setRate(parseFloat(e.target.value))}
-                aria-label="Velocidade de leitura"
-                data-testid="speed-slider"
-              />
-              <span className="speed-value">{rate.toFixed(1)}x</span>
-            </div>
-
-            <div className="volume-control" data-testid="volume-control">
-              <label htmlFor="volume-slider">
-                <Volume2 aria-hidden="true" />
-                <span className="visually-hidden">Volume</span>
-              </label>
-              <input
-                id="volume-slider"
-                type="range"
-                min="0"
-                max="1"
-                step="0.1"
-                value={volume}
-                onChange={(e) => setVolume(parseFloat(e.target.value))}
-                aria-label="Volume de leitura"
-                data-testid="volume-slider"
-              />
-              <span className="volume-value">{Math.round(volume * 100)}%</span>
-            </div>
-          </div>
-
-          <div className="navigation-controls" data-testid="navigation-controls">
-            <h3 className="navigation-title">Navegação Rápida</h3>
-            <button
-              type="button"
-              className="nav-quick-button"
-              onClick={readTitle}
-              aria-label="Ler título da página"
-              data-testid="read-title-button"
-            >
-              Ler Título
-            </button>
-            <button
-              type="button"
-              className="nav-quick-button"
-              onClick={readFilters}
-              aria-label="Ler filtros"
-              data-testid="read-filters-button"
-            >
-              Ler Filtros
-            </button>
-            <button
-              type="button"
-              className="nav-quick-button"
-              onClick={readResults}
-              aria-label="Ler resultados"
-              data-testid="read-results-button"
-            >
-              Ler Resultados
-            </button>
-          </div>
-        </div>
-
-        <button
-          type="button"
-          className="control-button dark-mode-toggle"
-          onClick={toggleDarkMode}
-          aria-label={darkMode ? 'Ativar modo claro' : 'Ativar modo escuro'}
-          aria-pressed={darkMode}
-          data-testid="dark-mode-toggle"
-        >
-          {darkMode ? <Sun aria-hidden="true" /> : <Moon aria-hidden="true" />}
-          <span className="visually-hidden">{darkMode ? 'Modo claro' : 'Modo escuro'}</span>
-        </button>
-      </div>
-
       <header className="accessibility-header" aria-labelledby="restaurant-title" data-testid="accessibility-header">
         <div className="header-content">
-          <p className="header-kicker">Experiência otimizada para leitores de tela</p>
-          <h1 id="restaurant-title" ref={titleRef} data-testid="restaurant-title">{pageTitle}</h1>
-          <p id="restaurant-context">
-            Use o teclado para navegar: Tab para avançar, Shift+Tab para voltar. Pressione Enter no botão "Adicionar ao pedido" para colocar o prato no carrinho.
-          </p>
+          <div className="header-top">
+            <div>
+              <p className="header-kicker">Experiência otimizada para leitores de tela</p>
+              <h1 id="restaurant-title" data-testid="restaurant-title">{pageTitle}</h1>
+              <p id="restaurant-context">
+                Use o teclado para navegar: Tab para avançar, Shift+Tab para voltar. Pressione Enter no botão "Adicionar ao pedido" para colocar o prato no carrinho.
+              </p>
+            </div>
+            <button
+              type="button"
+              className="dark-mode-toggle-header"
+              onClick={toggleDarkMode}
+              aria-label={darkMode ? 'Ativar modo claro' : 'Ativar modo escuro'}
+              aria-pressed={darkMode}
+              data-testid="dark-mode-toggle"
+            >
+              {darkMode ? <Sun aria-hidden="true" /> : <Moon aria-hidden="true" />}
+              <span className="visually-hidden">{darkMode ? 'Modo claro' : 'Modo escuro'}</span>
+            </button>
+          </div>
         </div>
 
-        <nav className="accessibility-nav" aria-label="Navegação consistente do cardápio" data-testid="accessibility-nav">
-          <button type="button" className="nav-button" tabIndex={0} aria-label="Voltar ao menu principal" data-testid="nav-main-button">
-            Menu principal
-          </button>
-          <button type="button" className="nav-button" tabIndex={0} aria-label="Ver itens do carrinho" data-testid="nav-cart-button">
-            Carrinho
-          </button>
-          <button type="button" className="nav-button" tabIndex={0} aria-label="Fechar conta" data-testid="nav-checkout-button">
-            Fechar conta
-          </button>
-        </nav>
       </header>
 
+      {/* Botão flutuante de carrinho - aparece apenas quando o carrinho está fechado */}
+      {!isOpen && (
+        <button
+          type="button"
+          className="floating-cart-button"
+          onClick={() => setIsOpen(true)}
+          aria-label={`Ver carrinho. ${cart.items.length} ${cart.items.length === 1 ? 'item' : 'itens'} no carrinho`}
+          data-testid="floating-cart-button"
+          tabIndex={0}
+        >
+          <ShoppingCart aria-hidden="true" />
+          {cart.items.length > 0 && (
+            <span className="floating-cart-badge" aria-label={`${cart.items.length} ${cart.items.length === 1 ? 'item' : 'itens'}`}>
+              {cart.items.length}
+            </span>
+          )}
+        </button>
+      )}
+
       <main id="conteudo-principal" role="main" aria-live="polite" data-testid="main-content">
-        <section className="filters-section-accessible" aria-labelledby="filtros-cardapio" ref={filtersRef} data-testid="filters-section">
+        <section className="filters-section-accessible" aria-labelledby="filtros-cardapio" data-testid="filters-section">
           <h2 id="filtros-cardapio">Filtros do cardápio</h2>
           <p id="filters-instructions">
             Todos os campos têm rótulos. Informe o termo desejado ou escolha uma categoria para refinar os resultados.
@@ -341,7 +231,7 @@ const ProductListAccessibility: React.FC = () => {
           </div>
         </section>
 
-        <section aria-live="polite" aria-atomic="true" className="results-info-accessible" ref={resultsRef} data-testid="results-section">
+        <section aria-live="polite" aria-atomic="true" className="results-info-accessible" data-testid="results-section">
           <p id="resultado-contagem">
             {filteredProducts.length} prato(s) encontrados
             {searchTerm && ` para "${searchTerm}"`}
@@ -451,6 +341,7 @@ const ProductListAccessibility: React.FC = () => {
           ))}
         </section>
       </main>
+      <CartSidebarAccessibility />
     </div>
   );
 };

@@ -29,6 +29,9 @@ const Header: React.FC = () => {
   const location = useLocation();
   const { user, logout, isAuthenticated } = useAuth();
   const { getItemCount, setIsOpen } = useCart();
+  
+  // Verificar se está na página de acessibilidade
+  const isAccessibilityPage = location.pathname === '/acessibilidade';
 
   const handleLogout = async (): Promise<void> => {
     await logout();
@@ -81,23 +84,25 @@ const Header: React.FC = () => {
 
           {/* Right Actions */}
           <div className="header-actions">
-            {/* Cart */}
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => setIsOpen(true)}
-              className="cart-button"
-            >
-              <ShoppingCart className="cart-icon" />
-              {getItemCount() > 0 && (
-                <Badge 
-                  variant="destructive" 
-                  className="cart-badge"
-                >
-                  {getItemCount()}
-                </Badge>
-              )}
-            </Button>
+            {/* Cart - Só mostra o botão se NÃO estiver na página de acessibilidade */}
+            {!isAccessibilityPage && (
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setIsOpen(true)}
+                className="cart-button"
+              >
+                <ShoppingCart className="cart-icon" />
+                {getItemCount() > 0 && (
+                  <Badge 
+                    variant="destructive" 
+                    className="cart-badge"
+                  >
+                    {getItemCount()}
+                  </Badge>
+                )}
+              </Button>
+            )}
 
             {/* User Menu */}
             {isAuthenticated ? (
