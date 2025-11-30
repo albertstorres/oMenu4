@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams, useLocation } from 'react-router-dom';
 import { ChefHat, CheckCircle2, ArrowLeft, Receipt, CreditCard, Moon, Sun, Volume2 } from 'lucide-react';
 import { useTextToSpeech } from '../../../hooks/useTextToSpeech';
 // TODO: REMOVER QUANDO BACKEND FOR IMPLEMENTADO - useOrder é temporário
@@ -24,6 +24,7 @@ interface Order {
 
 const MeuPedido: React.FC = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [searchParams] = useSearchParams();
   const orderId = searchParams.get('pedido');
   // const { user } = useAuth(); // TODO: Usar quando necessário
@@ -92,6 +93,16 @@ const MeuPedido: React.FC = () => {
   useEffect(() => {
     document.documentElement.classList.toggle('dark-mode', darkMode);
   }, [darkMode]);
+
+  // Ler título quando o usuário entrar na página
+  useEffect(() => {
+    if (location.pathname === '/acessibilidade/meuPedidos') {
+      const timer = setTimeout(() => {
+        read('Meus Pedidos');
+      }, 500);
+      return () => clearTimeout(timer);
+    }
+  }, [location.pathname, read]);
 
   const toggleDarkMode = () => {
     setDarkMode(!darkMode);

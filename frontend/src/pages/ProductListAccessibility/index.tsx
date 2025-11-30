@@ -370,7 +370,6 @@ const ProductListAccessibility: React.FC = () => {
                       key={product.id}
                       id={`prato-${product.id}`}
                       className="accessible-card"
-                      role="article"
                       aria-labelledby={`prato-name-${product.id}`}
                       aria-describedby={`${productImageCaptionId} ${productDescriptionId} ${productPriceId}`}
                       tabIndex={0}
