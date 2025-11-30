@@ -483,6 +483,30 @@ const MeuPedido: React.FC = () => {
         </nav>
       </main>
 
+      {/* Animação de Pagamento Completo - Exibida na página principal */}
+      {paymentCompleted && !showBill && (
+        <div 
+          className="payment-completed-overlay"
+          role="status"
+          aria-live="assertive"
+          aria-atomic="true"
+          aria-label="Pagamento realizado com sucesso"
+        >
+          <div className="payment-completed-animation">
+            <div className="payment-icon-wrapper" aria-hidden="true">
+              <CheckCircle2 className="payment-icon" />
+            </div>
+            <h2 className="payment-title">Pagamento Realizado!</h2>
+            <p className="payment-message">
+              Sua conta foi fechada com sucesso.
+            </p>
+            <p className="payment-table" aria-label={`Mesa ${tableNumber}`}>
+              Mesa {tableNumber}
+            </p>
+          </div>
+        </div>
+      )}
+
       {/* Modal de Conta */}
       {showBill && orders.length > 0 && (
         <div 
